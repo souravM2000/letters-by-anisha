@@ -1,4 +1,4 @@
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
@@ -10,8 +10,11 @@ import type { SiteSettings, SocialLink } from "@/sanity/types";
 import { Mail, MapPin } from "lucide-react";
 
 export async function ContactSection() {
-  const { data } = await sanityFetch({ query: siteSettingsQuery });
-  const settings = data as SiteSettings | null;
+  const settings = await client.fetch<SiteSettings | null>(
+    siteSettingsQuery,
+    {},
+    { next: { tags: ["settings"] } }
+  );
 
   // Derive contact details from socialHandles
   const emailHandle = settings?.socialHandles?.find(

@@ -4,7 +4,6 @@ import "./globals.css";
 import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
-import { SanityLive } from "@/sanity/lib/live";
 import type { SiteSettings } from "@/sanity/types";
 
 const playfair = Playfair_Display({
@@ -28,9 +27,8 @@ const DEFAULT_DESC =
   "Bookstagram creator, book reviewer, and English Literature postgrad. Exploring stories, one page at a time.";
 
 export async function generateMetadata(): Promise<Metadata> {
-  // Use the plain client (not sanityFetch) so metadata can be cached independently
   const settings = await client
-    .fetch<SiteSettings | null>(siteSettingsQuery)
+    .fetch<SiteSettings | null>(siteSettingsQuery, {}, { next: { tags: ["settings"] } })
     .catch(() => null);
 
   const seo = settings?.seo;
@@ -96,7 +94,6 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col font-sans bg-brand-cream text-brand-ink selection:bg-brand-terracotta selection:text-white">
         {children}
-        <SanityLive />
       </body>
     </html>
   );

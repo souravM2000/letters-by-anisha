@@ -1,15 +1,18 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { aboutQuery } from "@/sanity/lib/queries";
 import { GraduationCap, Sparkles } from "lucide-react";
 import type { About, EducationItem, SkillCategory } from "@/sanity/types";
 import { FadeUp, StaggerGrid, StaggerItem } from "@/components/ui/Motion";
 
 export async function EducationSection() {
-  const { data } = await sanityFetch({ query: aboutQuery });
-  const aboutData = data as About | null;
+  const aboutData = await client.fetch<About | null>(
+    aboutQuery,
+    {},
+    { next: { tags: ["about"] } }
+  );
 
   const hasEducation = (aboutData?.education?.length ?? 0) > 0;
   const hasSkills = (aboutData?.skills?.length ?? 0) > 0;

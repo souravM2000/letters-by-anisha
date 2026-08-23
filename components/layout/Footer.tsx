@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { Container } from "../ui/Container";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import { SocialIcon, formatSocialUrl } from "../ui/SocialIcon";
 import type { SiteSettings, SocialLink } from "@/sanity/types";
 
 export async function Footer() {
-  const { data } = await sanityFetch({ query: siteSettingsQuery });
-  const settings = data as SiteSettings | null;
+  const settings = await client.fetch<SiteSettings | null>(
+    siteSettingsQuery,
+    {},
+    { next: { tags: ["settings"] } }
+  );
   const currentYear = new Date().getFullYear();
 
   return (

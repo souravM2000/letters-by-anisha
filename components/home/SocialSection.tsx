@@ -1,7 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { FadeUp } from "@/components/ui/Motion";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import type { SiteSettings } from "@/sanity/types";
 
@@ -21,8 +21,11 @@ function formatDate(dateStr: string | null | undefined): string | null {
 }
 
 export async function SocialSection() {
-  const { data } = await sanityFetch({ query: siteSettingsQuery });
-  const settings = data as SiteSettings | null;
+  const settings = await client.fetch<SiteSettings | null>(
+    siteSettingsQuery,
+    {},
+    { next: { tags: ["settings"] } }
+  );
   const metrics = settings?.metrics;
 
   const stats = [

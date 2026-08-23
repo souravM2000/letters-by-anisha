@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { aboutQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
 import { FileDown } from "lucide-react";
@@ -10,13 +10,11 @@ import { SocialIcon, formatSocialUrl } from "@/components/ui/SocialIcon";
 import type { About, SiteSettings, SocialLink } from "@/sanity/types";
 
 export async function AboutSection() {
-  const [{ data: about }, { data: settings }] = await Promise.all([
-    sanityFetch({ query: aboutQuery }),
-    sanityFetch({ query: siteSettingsQuery })
+  const [aboutData, settingsData] = await Promise.all([
+    client.fetch<About | null>(aboutQuery, {}, { next: { tags: ["about"] } }),
+    client.fetch<SiteSettings | null>(siteSettingsQuery, {}, { next: { tags: ["settings"] } }),
   ]);
   
-  const aboutData = about as About | null;
-  const settingsData = settings as SiteSettings | null;
   const socialHandles = settingsData?.socialHandles?.filter((s) => Boolean(s.url || s.handle)) || [];
 
   return (

@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { featuredPostsQuery, recentPostsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import type { Post } from "@/sanity/types";
@@ -18,11 +18,17 @@ function PlatformBadge({ platform }: { platform: string }) {
 
 export async function TopPosts() {
   // Try featured first, fall back to most recent
-  const { data: featuredData } = await sanityFetch({ query: featuredPostsQuery });
-  let posts = featuredData as Post[] | null;
+  let posts = await client.fetch<Post[] | null>(
+    featuredPostsQuery,
+    {},
+    { next: { tags: ["posts"] } }
+  );
   if (!posts || posts.length === 0) {
-    const { data: recentData } = await sanityFetch({ query: recentPostsQuery });
-    posts = recentData as Post[] | null;
+    posts = await client.fetch<Post[] | null>(
+      recentPostsQuery,
+      {},
+      { next: { tags: ["posts"] } }
+    );
   }
 
   return (

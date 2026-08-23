@@ -4,14 +4,17 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { StarRating } from "@/components/ui/StarRating";
 import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { bookReviewsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import type { BookReview } from "@/sanity/types";
 
 export async function BookReviews() {
-  const { data } = await sanityFetch({ query: bookReviewsQuery });
-  const reviews = data as BookReview[] | null;
+  const reviews = await client.fetch<BookReview[] | null>(
+    bookReviewsQuery,
+    {},
+    { next: { tags: ["reviews"] } }
+  );
 
   return (
     <Section id="reviews" bgClass="bg-brand-cream">

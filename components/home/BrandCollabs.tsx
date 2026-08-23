@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { brandCollabsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
@@ -18,8 +18,11 @@ const COLLAB_TYPE_LABEL: Record<string, string> = {
 };
 
 export async function BrandCollabs() {
-  const { data } = await sanityFetch({ query: brandCollabsQuery });
-  const collabs = data as BrandCollab[] | null;
+  const collabs = await client.fetch<BrandCollab[] | null>(
+    brandCollabsQuery,
+    {},
+    { next: { tags: ["collabs"] } }
+  );
 
   // Separate collabs with logos for the logo strip
   const collabsWithLogos = collabs?.filter((c) => c.brandLogo) || [];

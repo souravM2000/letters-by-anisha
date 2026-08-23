@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { writingPiecesQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { ArrowUpRight } from "lucide-react";
@@ -17,8 +17,11 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export async function WritingSection() {
-  const { data } = await sanityFetch({ query: writingPiecesQuery });
-  const pieces = data as WritingPiece[] | null;
+  const pieces = await client.fetch<WritingPiece[] | null>(
+    writingPiecesQuery,
+    {},
+    { next: { tags: ["writing"] } }
+  );
 
   return (
     <Section id="writing" bgClass="bg-brand-vanilla">

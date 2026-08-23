@@ -1,6 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { sanityFetch } from "@/sanity/lib/live";
+import { client } from "@/sanity/lib/client";
 import { metricsQuery } from "@/sanity/lib/queries";
 import type { SiteMetrics } from "@/sanity/types";
 
@@ -44,8 +44,11 @@ function StatChip({ label, value, suffix }: StatChipProps) {
 }
 
 export async function MetricsBar() {
-  const { data } = await sanityFetch({ query: metricsQuery });
-  const metrics = data as SiteMetrics | null;
+  const metrics = await client.fetch<SiteMetrics | null>(
+    metricsQuery,
+    {},
+    { next: { tags: ["settings"] } }
+  );
 
   if (!metrics) return null;
 
