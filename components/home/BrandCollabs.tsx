@@ -42,14 +42,19 @@ export async function BrandCollabs() {
           <>
             {/* Logo strip */}
             {collabsWithLogos.length > 0 && (
-              <FadeIn className="flex flex-wrap justify-center items-center gap-8 md:gap-12 mb-16 pb-16 border-b border-brand-ink/10">
+              <FadeIn className="flex flex-wrap justify-center items-center gap-6 md:gap-8 mb-10 pb-10 border-b border-brand-ink/10">
                 {collabsWithLogos.map((c) => (
-                  <div key={c._id} className="relative w-24 h-12 md:w-32 md:h-16 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300">
+                  <div
+                    key={c._id}
+                    className="relative w-16 h-16 md:w-20 md:h-20 rounded-full border border-brand-ink/10 bg-white p-2.5 shadow-sm overflow-hidden flex items-center justify-center grayscale hover:grayscale-0 opacity-70 hover:opacity-100 transition-all duration-300 hover:scale-105"
+                    title={c.brandName}
+                  >
                     <Image
                       src={urlFor(c.brandLogo!).width(200).url()}
                       alt={`${c.brandName} logo`}
                       fill
-                      className="object-contain"
+                      sizes="(max-width: 768px) 64px, 80px"
+                      className="object-contain p-1.5 rounded-full"
                     />
                   </div>
                 ))}
@@ -57,22 +62,23 @@ export async function BrandCollabs() {
             )}
 
             {/* Collab cards */}
-            <StaggerGrid className="space-y-8">
+            <StaggerGrid className="space-y-6">
               {collabs.map((collab) => (
                 <StaggerItem key={collab._id}>
                 <div
                   key={collab._id}
-                  className="bg-brand-cream editorial-border p-6 md:p-8"
+                  className="bg-brand-cream editorial-border p-6 md:p-8 rounded-xl"
                 >
-                  <div className="flex flex-col md:flex-row gap-6">
-                    {/* Logo (inline with card, if available) */}
+                  <div className="flex flex-col md:flex-row gap-6 items-start">
+                    {/* Logo (Round) */}
                     {collab.brandLogo && (
-                      <div className="relative w-16 h-16 shrink-0 editorial-border p-2 bg-white">
+                      <div className="relative w-14 h-14 sm:w-16 sm:h-16 shrink-0 rounded-full border border-brand-ink/10 p-2 bg-white shadow-sm overflow-hidden flex items-center justify-center">
                         <Image
                           src={urlFor(collab.brandLogo).width(120).url()}
                           alt={`${collab.brandName} logo`}
                           fill
-                          className="object-contain"
+                          sizes="64px"
+                          className="object-contain p-1 rounded-full"
                         />
                       </div>
                     )}

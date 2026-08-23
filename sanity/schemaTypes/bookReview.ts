@@ -52,29 +52,25 @@ export const bookReview = defineType({
       name: 'author',
       title: 'Author',
       type: 'string',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       options: { source: 'bookTitle', maxLength: 96 },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'coverImage',
       title: 'Cover Image',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'rating',
       title: 'Rating (out of 5)',
       type: 'number',
       validation: (Rule) =>
-        Rule.required()
-          .min(0)
+        Rule.min(0)
           .max(5)
           .precision(1)
           .error('Rating must be between 0 and 5 in 0.5 increments'),
@@ -104,7 +100,7 @@ export const bookReview = defineType({
       type: 'text',
       rows: 4,
       validation: (Rule) =>
-        Rule.required().max(300).error('Excerpt must be 300 characters or fewer'),
+        Rule.max(300).warning('Excerpt is recommended to be 300 characters or fewer'),
     }),
     defineField({
       name: 'fullReview',
@@ -126,7 +122,6 @@ export const bookReview = defineType({
       name: 'publishedDate',
       title: 'Published Date',
       type: 'datetime',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'featured',

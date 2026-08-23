@@ -21,7 +21,7 @@ export async function WritingSection() {
   const pieces = data as WritingPiece[] | null;
 
   return (
-    <Section id="writing" bgClass="bg-brand-cream">
+    <Section id="writing" bgClass="bg-brand-vanilla">
       <Container>
         <SectionHeading eyebrow="Essays & Musings" title="Writing" />
 
@@ -35,7 +35,7 @@ export async function WritingSection() {
             </p>
           </div>
         ) : (
-          <StaggerGrid className="space-y-6">
+          <StaggerGrid className="space-y-4 sm:space-y-5">
             {pieces.map((piece) => (
               <StaggerItem key={piece._id}>
               <a
@@ -43,26 +43,27 @@ export async function WritingSection() {
                 href={piece.externalUrl ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col md:flex-row gap-6 p-6 bg-brand-vanilla editorial-border hover:shadow-md transition-all duration-300"
+                className="group flex flex-row items-start gap-4 sm:gap-6 p-4 sm:p-5 bg-brand-vanilla editorial-border hover:shadow-md transition-all duration-300 rounded-lg"
               >
-                {/* Optional cover image */}
+                {/* Optional cover image (Compact) */}
                 {piece.coverImage && (
-                  <div className="relative w-full md:w-40 aspect-[3/2] md:aspect-[3/4] shrink-0 overflow-hidden">
+                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 aspect-square shrink-0 rounded-lg overflow-hidden border border-brand-ink/10 bg-brand-cream shadow-xs">
                     <Image
-                      src={urlFor(piece.coverImage).width(320).height(420).url()}
+                      src={urlFor(piece.coverImage).width(240).height(240).url()}
                       alt={piece.title ?? "Article cover"}
                       fill
+                      sizes="(max-width: 640px) 80px, 112px"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
                 )}
 
                 {/* Text body */}
-                <div className="flex flex-col flex-1 justify-center">
+                <div className="flex flex-col flex-1 min-w-0">
                   {/* Category badge */}
                   {piece.category && (
                     <span
-                      className={`inline-block w-fit text-xs uppercase tracking-widest px-3 py-1 rounded-sm mb-3 ${
+                      className={`inline-block w-fit text-[10px] sm:text-xs uppercase tracking-widest px-2.5 py-0.5 rounded-sm mb-2 font-medium ${
                         CATEGORY_COLORS[piece.category] || "bg-brand-ink/5 text-brand-ink/60"
                       }`}
                     >
@@ -70,19 +71,19 @@ export async function WritingSection() {
                     </span>
                   )}
 
-                  <h3 className="font-serif text-xl md:text-2xl text-brand-ink group-hover:text-brand-crimson transition-colors mb-2">
+                  <h3 className="font-serif text-base sm:text-lg md:text-xl text-brand-ink group-hover:text-brand-crimson transition-colors mb-1.5 font-medium line-clamp-2">
                     {piece.title}
                   </h3>
 
                   {piece.excerpt && (
-                    <p className="text-sm text-brand-ink/60 leading-relaxed line-clamp-2 mb-4">
+                    <p className="text-xs sm:text-sm text-brand-ink/60 leading-relaxed line-clamp-2 mb-3">
                       {piece.excerpt}
                     </p>
                   )}
 
-                  <span className="inline-flex items-center gap-1 text-sm font-medium text-brand-terracotta group-hover:text-brand-crimson transition-colors mt-auto">
+                  <span className="inline-flex items-center gap-1 text-xs sm:text-sm font-medium text-brand-terracotta group-hover:text-brand-crimson transition-colors mt-auto">
                     Read on WordPress
-                    <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    <ArrowUpRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </span>
                 </div>
               </a>

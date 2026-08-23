@@ -1,12 +1,11 @@
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { Hero } from "@/components/home/Hero";
-import { MetricsBar } from "@/components/home/MetricsBar";
+import { Navbar, Footer, FloatingContactButton } from "@/components/layout";
+import { AboutSection } from "@/components/home/AboutSection";
+import { SocialSection } from "@/components/home/SocialSection";
 import { TopPosts } from "@/components/home/TopPosts";
+import { BrandCollabs } from "@/components/home/BrandCollabs";
 import { BookReviews } from "@/components/home/BookReviews";
 import { WritingSection } from "@/components/home/WritingSection";
-import { BrandCollabs } from "@/components/home/BrandCollabs";
-import { AboutSection } from "@/components/home/AboutSection";
+import { EducationSection } from "@/components/home/EducationSection";
 import { ContactSection } from "@/components/home/ContactSection";
 
 export default function Home() {
@@ -15,17 +14,18 @@ export default function Home() {
       <Navbar />
 
       <main className="flex flex-col min-h-screen w-full">
-        <Hero />
-        <MetricsBar />
+        <AboutSection />
+        <SocialSection />
         <TopPosts />
+        <BrandCollabs />
         <BookReviews />
         <WritingSection />
-        <BrandCollabs />
-        <AboutSection />
+        <EducationSection />
         <ContactSection />
       </main>
 
       <Footer />
+      <FloatingContactButton />
     </>
   );
 }

@@ -38,14 +38,13 @@ export const writingPiece = defineType({
         ],
         layout: 'radio',
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'externalUrl',
       title: 'WordPress Post URL',
       type: 'url',
       validation: (Rule) =>
-        Rule.required().uri({ scheme: ['http', 'https'] }),
+        Rule.uri({ scheme: ['http', 'https'] }),
       description: 'Full URL to the WordPress blog post',
     }),
     defineField({
@@ -54,7 +53,7 @@ export const writingPiece = defineType({
       type: 'text',
       rows: 4,
       validation: (Rule) =>
-        Rule.required().max(300).error('Excerpt must be 300 characters or fewer'),
+        Rule.max(300).warning('Excerpt is recommended to be 300 characters or fewer'),
     }),
     defineField({
       name: 'coverImage',
@@ -66,7 +65,6 @@ export const writingPiece = defineType({
       name: 'publishedDate',
       title: 'Published Date',
       type: 'datetime',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'featured',

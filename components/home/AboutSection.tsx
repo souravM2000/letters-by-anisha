@@ -1,111 +1,116 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
 import { sanityFetch } from "@/sanity/lib/live";
-import { aboutQuery } from "@/sanity/lib/queries";
+import { aboutQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
-import { GraduationCap, Sparkles } from "lucide-react";
-import type { About, EducationItem, SkillCategory } from "@/sanity/types";
+import { FileDown } from "lucide-react";
+import { urlFor } from "@/sanity/lib/image";
+import { SocialIcon, formatSocialUrl } from "@/components/ui/SocialIcon";
+import type { About, SiteSettings, SocialLink } from "@/sanity/types";
 
 export async function AboutSection() {
-  const { data } = await sanityFetch({ query: aboutQuery });
-  const about = data as About | null;
+  const [{ data: about }, { data: settings }] = await Promise.all([
+    sanityFetch({ query: aboutQuery }),
+    sanityFetch({ query: siteSettingsQuery })
+  ]);
+  
+  const aboutData = about as About | null;
+  const settingsData = settings as SiteSettings | null;
+  const socialHandles = settingsData?.socialHandles?.filter((s) => Boolean(s.url || s.handle)) || [];
 
   return (
-    <Section id="about" bgClass="bg-brand-cream">
+    <Section id="about" bgClass="bg-brand-cream" className="pt-28 md:pt-32 pb-8 md:pb-12">
       <Container>
-        <SectionHeading eyebrow="Meet the author" title="About" />
-
-        {!about ? (
-          <div className="text-center py-16">
-            <p className="font-handwritten text-3xl text-brand-terracotta/60 mb-2">
-              Story coming soon
-            </p>
-            <p className="text-brand-ink/40 text-sm">
-              Getting to know the person behind the pages.
-            </p>
+        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 items-start">
+          
+          {/* Left Column: Framed Image */}
+          <div className="relative w-full max-w-md mx-auto lg:mx-0">
+            {settingsData?.profileImage ? (
+              <div className="relative aspect-[4/5] w-full border border-brand-terracotta p-2 bg-brand-cream">
+                <div className="relative w-full h-full">
+                  <Image
+                    src={urlFor(settingsData.profileImage).width(800).url()}
+                    alt={settingsData?.name || "Anisha"}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 500px"
+                    className="object-cover"
+                    priority
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="aspect-[4/5] bg-brand-vanilla border border-brand-terracotta flex items-center justify-center p-2">
+                <span className="text-brand-ink/40 font-handwritten text-2xl">Image coming soon</span>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="space-y-16 md:space-y-24">
 
-            {/* ── Intro ─────────────────────────────────────────────────── */}
-            {about.intro && (
-              <div className="max-w-3xl mx-auto prose prose-lg prose-brand text-brand-ink/80 leading-relaxed">
-                <PortableText value={about.intro} />
-              </div>
+          {/* Right Column: About Text & Connect */}
+          <div className="flex flex-col pt-4 lg:pt-8">
+            <span className="font-handwritten text-3xl md:text-4xl text-brand-terracotta mb-2 block">
+              Meet the author
+            </span>
+            <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight text-brand-crimson font-medium mb-8">
+              About
+            </h2>
+
+            {!aboutData ? (
+               <p className="text-brand-ink/40">Story coming soon</p>
+            ) : (
+              <>
+                {aboutData.intro && (
+                  <div className="prose prose-lg prose-brand text-brand-ink/90 leading-relaxed mb-12">
+                    <PortableText value={aboutData.intro} />
+                  </div>
+                )}
+              </>
             )}
 
-            {/* ── Education Timeline ────────────────────────────────────── */}
-            {about.education && about.education.length > 0 && (
-              <div>
-                <div className="flex items-center gap-3 mb-8">
-                  <GraduationCap className="w-5 h-5 text-brand-terracotta" />
-                  <h3 className="font-serif text-2xl text-brand-crimson">Education</h3>
+            {/* Let's Connect Section */}
+            <div>
+              <h3 className="font-serif text-3xl text-brand-crimson mb-6">
+                Let&apos;s Connect
+              </h3>
+              
+              <div className="flex flex-wrap items-center gap-6">
+                <div className="flex flex-wrap gap-3">
+                  {socialHandles.map((social: SocialLink, i: number) => {
+                    const href = formatSocialUrl(social.url, social.platform);
+                    const isEmail = social.platform?.toLowerCase().includes("email");
+                    
+                    return (
+                      <a
+                        key={i}
+                        href={href}
+                        target={isEmail ? undefined : "_blank"}
+                        rel={isEmail ? undefined : "noopener noreferrer"}
+                        className="w-10 h-10 rounded-full bg-brand-terracotta text-brand-cream hover:bg-brand-crimson transition-colors flex items-center justify-center"
+                        title={social.platform}
+                      >
+                        <SocialIcon platform={social.platform} className="w-5 h-5" />
+                      </a>
+                    );
+                  })}
                 </div>
-                <div className="relative pl-8 border-l-2 border-brand-terracotta/30 space-y-8">
-                  {about.education.map((edu: EducationItem, i: number) => (
-                    <div key={i} className="relative">
-                      {/* Timeline dot */}
-                      <div className="absolute -left-[2.35rem] top-1.5 w-3 h-3 rounded-full bg-brand-terracotta border-2 border-brand-cream" />
 
-                      <div className="bg-brand-vanilla editorial-border p-5 md:p-6">
-                        <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 mb-1">
-                          <h4 className="font-serif text-lg text-brand-ink font-medium">
-                            {edu.degree}
-                          </h4>
-                          {edu.year && (
-                            <span className="text-xs uppercase tracking-widest text-brand-ink/40 shrink-0">
-                              {edu.year}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm text-brand-ink/60 italic">
-                          {edu.institution}
-                        </p>
-                        {edu.scoreLabel && (
-                          <p className="text-xs mt-2 text-brand-terracotta font-medium">
-                            {edu.scoreLabel}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
+                {(settingsData as any)?.resumeUrl && (
+                  <a
+                    href={(settingsData as any).resumeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-6 py-2 rounded-full border border-brand-terracotta text-brand-crimson hover:bg-brand-terracotta hover:text-brand-cream transition-all text-sm font-medium"
+                  >
+                    <span>Download Portfolio (PDF)</span>
+                    <FileDown className="w-4 h-4" />
+                  </a>
+                )}
               </div>
-            )}
-
-            {/* ── Skills ────────────────────────────────────────────────── */}
-            {about.skills && about.skills.length > 0 && (
-              <div>
-                <div className="flex items-center gap-3 mb-8">
-                  <Sparkles className="w-5 h-5 text-brand-terracotta" />
-                  <h3 className="font-serif text-2xl text-brand-crimson">Skills</h3>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {about.skills.map((group: SkillCategory, i: number) => (
-                    <div key={i} className="bg-brand-vanilla editorial-border p-5">
-                      <h4 className="text-xs uppercase tracking-[0.2em] text-brand-terracotta font-medium mb-4">
-                        {group.category}
-                      </h4>
-                      <div className="flex flex-wrap gap-2">
-                        {group.items?.map((item: string, j: number) => (
-                          <span
-                            key={j}
-                            className="text-sm px-3 py-1 bg-brand-cream text-brand-ink/70 editorial-border"
-                          >
-                            {item}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
+            </div>
           </div>
-        )}
+        </div>
       </Container>
     </Section>
   );
 }
+

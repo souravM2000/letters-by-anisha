@@ -4,6 +4,7 @@ import "./globals.css";
 import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
+import { SanityLive } from "@/sanity/lib/live";
 import type { SiteSettings } from "@/sanity/types";
 
 const playfair = Playfair_Display({
@@ -90,10 +91,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${playfair.variable} ${plusJakartaSans.variable} ${caveat.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-brand-cream text-brand-ink selection:bg-brand-terracotta selection:text-white">
         {children}
+        <SanityLive />
       </body>
     </html>
   );

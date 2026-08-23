@@ -15,20 +15,20 @@ export function SectionHeading({
 }: SectionHeadingProps) {
   const content = (
     <div
-      className={`mb-12 md:mb-16 flex flex-col ${
+      className={`mb-8 md:mb-10 flex flex-col ${
         align === "center" ? "items-center text-center" : "items-start text-left"
       }`}
     >
       {eyebrow && (
-        <span className="font-handwritten text-2xl text-brand-terracotta mb-2 inline-block">
+        <span className="font-handwritten text-2xl text-brand-terracotta mb-1 inline-block">
           {eyebrow}
         </span>
       )}
-      <h2 className="font-serif text-4xl md:text-5xl lg:text-6xl text-brand-crimson font-medium">
+      <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-brand-crimson font-medium">
         {title}
       </h2>
       <div
-        className={`h-0.5 w-16 bg-brand-terracotta mt-6 ${
+        className={`h-0.5 w-14 bg-brand-terracotta mt-4 ${
           align === "center" ? "mx-auto" : ""
         }`}
       />

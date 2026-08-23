@@ -5,8 +5,9 @@ import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ContactForm } from "@/components/ContactForm";
 import { FadeUp } from "@/components/ui/Motion";
+import { SocialIcon, formatSocialUrl } from "@/components/ui/SocialIcon";
 import type { SiteSettings, SocialLink } from "@/sanity/types";
-import { Mail, MapPin, Globe } from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
 
 export async function ContactSection() {
   const { data } = await sanityFetch({ query: siteSettingsQuery });
@@ -14,7 +15,7 @@ export async function ContactSection() {
 
   // Derive contact details from socialHandles
   const emailHandle = settings?.socialHandles?.find(
-    (s: SocialLink) => s.platform === "Email"
+    (s: SocialLink) => s.platform?.toLowerCase() === "email"
   );
 
   return (
@@ -36,9 +37,9 @@ export async function ContactSection() {
             </div>
 
             <div className="space-y-4">
-              {emailHandle?.url && (
+              {emailHandle && (
                 <a
-                  href={emailHandle.url}
+                  href={formatSocialUrl(emailHandle.url, "Email")}
                   className="flex items-center gap-3 text-sm text-brand-ink/70 hover:text-brand-crimson transition-colors group"
                 >
                   <Mail className="w-4 h-4 text-brand-terracotta shrink-0" />
@@ -46,17 +47,16 @@ export async function ContactSection() {
                 </a>
               )}
               {settings?.socialHandles
-                ?.filter((s: SocialLink) => s.platform !== "Email")
-                .slice(0, 3)
+                ?.filter((s: SocialLink) => s.platform?.toLowerCase() !== "email" && Boolean(s.url || s.handle))
                 .map((s: SocialLink, i: number) => (
                   <a
                     key={i}
-                    href={s.url}
+                    href={formatSocialUrl(s.url, s.platform)}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 text-sm text-brand-ink/70 hover:text-brand-crimson transition-colors"
                   >
-                    <Globe className="w-4 h-4 text-brand-terracotta shrink-0" />
+                    <SocialIcon platform={s.platform} className="w-4 h-4 text-brand-terracotta shrink-0" />
                     <span>
                       {s.platform}
                       {s.handle && (

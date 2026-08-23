@@ -27,13 +27,11 @@ export const about = defineType({
               name: 'institution',
               title: 'Institution',
               type: 'string',
-              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'degree',
               title: 'Degree / Programme',
               type: 'string',
-              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'year',
@@ -76,7 +74,6 @@ export const about = defineType({
                   { title: 'Communication', value: 'Communication' },
                 ],
               },
-              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'items',

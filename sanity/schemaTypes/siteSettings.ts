@@ -18,7 +18,7 @@ export const siteSettings = defineType({
       title: 'Tagline',
       type: 'string',
       validation: (Rule) =>
-        Rule.required().max(100).error('Tagline must be 100 characters or fewer'),
+        Rule.max(100).warning('Tagline is recommended to be 100 characters or fewer'),
     }),
     defineField({
       name: 'bio',
@@ -31,7 +31,6 @@ export const siteSettings = defineType({
       title: 'Profile Image',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'socialHandles',
@@ -53,18 +52,23 @@ export const siteSettings = defineType({
                   { title: 'WordPress', value: 'WordPress' },
                   { title: 'LinkedIn', value: 'LinkedIn' },
                   { title: 'YouTube', value: 'YouTube' },
+                  { title: 'Threads', value: 'Threads' },
                   { title: 'TikTok', value: 'TikTok' },
+                  { title: 'Goodreads', value: 'Goodreads' },
+                  { title: 'Twitter / X', value: 'Twitter' },
+                  { title: 'Substack', value: 'Substack' },
+                  { title: 'Spotify / Podcast', value: 'Spotify' },
+                  { title: 'Pinterest', value: 'Pinterest' },
                   { title: 'Email', value: 'Email' },
                 ],
               },
-              validation: (Rule) => Rule.required(),
             }),
             defineField({
               name: 'url',
               title: 'URL',
               type: 'url',
               validation: (Rule) =>
-                Rule.uri({ scheme: ['http', 'https', 'mailto'] }),
+                Rule.uri({ scheme: ['http', 'https', 'mailto'], allowRelative: true }),
             }),
             defineField({
               name: 'handle',

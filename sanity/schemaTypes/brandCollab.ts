@@ -71,7 +71,6 @@ export const brandCollab = defineType({
       name: 'date',
       title: 'Collaboration Date',
       type: 'datetime',
-      validation: (Rule) => Rule.required(),
     }),
   ],
   preview: {

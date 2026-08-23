@@ -37,20 +37,17 @@ export const post = defineType({
         ],
         layout: 'radio',
       },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'embedUrl',
       title: 'Embed URL',
       type: 'url',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'caption',
@@ -62,7 +59,6 @@ export const post = defineType({
       name: 'publishedDate',
       title: 'Published Date',
       type: 'datetime',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'featured',

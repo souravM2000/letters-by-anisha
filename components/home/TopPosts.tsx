@@ -40,31 +40,33 @@ export async function TopPosts() {
             </p>
           </div>
         ) : (
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-            {posts.map((post) => (
+          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+            {posts.map((post, index) => (
               <StaggerItem key={post._id}>
               <a
                 key={post._id}
                 href={post.embedUrl ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group block editorial-border bg-brand-vanilla overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                className="group flex flex-col h-full editorial-border bg-brand-vanilla overflow-hidden hover:shadow-lg transition-shadow duration-300 rounded-lg"
               >
-                {/* Thumbnail */}
-                <div className="relative aspect-[4/5] overflow-hidden">
+                {/* Thumbnail (Compact) */}
+                <div className="relative aspect-[16/10] w-full overflow-hidden bg-brand-ink/5">
                   {post.platform && (
                     <PlatformBadge platform={post.platform} />
                   )}
                   {post.thumbnail ? (
                     <Image
-                      src={urlFor(post.thumbnail).width(600).height(750).url()}
+                      src={urlFor(post.thumbnail).width(600).height(375).url()}
                       alt={post.title ?? "Post thumbnail"}
                       fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      priority={index === 0}
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   ) : (
                     <div className="w-full h-full bg-brand-ink/5 flex items-center justify-center">
-                      <span className="font-serif text-brand-ink/20 text-lg italic">
+                      <span className="font-serif text-brand-ink/20 text-sm italic">
                         No thumbnail
                       </span>
                     </div>
@@ -74,12 +76,12 @@ export async function TopPosts() {
                 </div>
 
                 {/* Card body */}
-                <div className="p-5">
-                  <h3 className="font-serif text-lg text-brand-ink mb-2 line-clamp-2 group-hover:text-brand-crimson transition-colors">
+                <div className="p-4 flex flex-col flex-1">
+                  <h3 className="font-serif text-base md:text-lg text-brand-ink mb-1.5 line-clamp-2 group-hover:text-brand-crimson transition-colors font-medium">
                     {post.title}
                   </h3>
                   {post.caption && (
-                    <p className="text-sm text-brand-ink/60 line-clamp-2 leading-relaxed">
+                    <p className="text-xs md:text-sm text-brand-ink/60 line-clamp-2 leading-relaxed mt-auto">
                       {post.caption}
                     </p>
                   )}

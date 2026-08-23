@@ -6,11 +6,13 @@ import { Menu, X } from "lucide-react";
 import { Container } from "../ui/Container";
 
 const NAV_LINKS = [
+  { name: "About", href: "#about" },
+  { name: "Reach", href: "#reach" },
+  { name: "Top Posts", href: "#posts" },
+  { name: "Collabs", href: "#collabs" },
   { name: "Reviews", href: "#reviews" },
   { name: "Writing", href: "#writing" },
-  { name: "Collabs", href: "#collabs" },
-  { name: "About", href: "#about" },
-  { name: "Contact", href: "#contact" },
+  { name: "Education", href: "#education" },
 ];
 
 export function Navbar() {
@@ -24,6 +26,18 @@ export function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const target = document.querySelector(href);
+      if (target) {
+        target.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", href);
+      }
+    }
+    setMobileMenuOpen(false);
+  };
 
   return (
     <header
@@ -44,13 +58,14 @@ export function Navbar() {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-8">
           {NAV_LINKS.map((link) => (
-            <Link
+            <a
               key={link.name}
               href={link.href}
-              className="text-brand-ink/80 hover:text-brand-crimson transition-colors font-medium text-sm tracking-wide uppercase"
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="text-brand-ink/80 hover:text-brand-crimson transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer"
             >
               {link.name}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -68,14 +83,14 @@ export function Navbar() {
       {mobileMenuOpen && (
         <div className="absolute top-full left-0 right-0 bg-brand-vanilla border-b editorial-border shadow-lg p-6 flex flex-col space-y-4 md:hidden">
           {NAV_LINKS.map((link) => (
-            <Link
+            <a
               key={link.name}
               href={link.href}
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-brand-ink/90 hover:text-brand-crimson transition-colors text-lg font-medium uppercase tracking-wide py-2 border-b border-brand-ink/5"
+              onClick={(e) => handleNavClick(e, link.href)}
+              className="text-brand-ink/90 hover:text-brand-crimson transition-colors text-lg font-medium uppercase tracking-wide py-2 border-b border-brand-ink/5 cursor-pointer"
             >
               {link.name}
-            </Link>
+            </a>
           ))}
         </div>
       )}
