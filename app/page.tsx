@@ -7,9 +7,7 @@ import { BookReviews } from "@/components/home/BookReviews";
 import { WritingSection } from "@/components/home/WritingSection";
 import { BrandCollabs } from "@/components/home/BrandCollabs";
 import { AboutSection } from "@/components/home/AboutSection";
-import { Section } from "@/components/ui/Section";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Container } from "@/components/ui/Container";
+import { ContactSection } from "@/components/home/ContactSection";
 
 export default function Home() {
   return (
@@ -24,24 +22,11 @@ export default function Home() {
         <WritingSection />
         <BrandCollabs />
         <AboutSection />
-
-        {/* Contact placeholder — will be built in Prompt 4 */}
-        <Section id="contact" bgClass="bg-brand-vanilla">
-          <Container>
-            <SectionHeading eyebrow="Get in touch" title="Contact" />
-            <div className="text-center py-16">
-              <p className="font-handwritten text-3xl text-brand-terracotta/60 mb-2">
-                Contact form coming soon
-              </p>
-              <p className="text-brand-ink/40 text-sm">
-                Reach out for collaborations, commissions, or just to chat about books.
-              </p>
-            </div>
-          </Container>
-        </Section>
+        <ContactSection />
       </main>
 
       <Footer />
     </>
   );
 }
+

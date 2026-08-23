@@ -6,6 +6,7 @@ import { sanityFetch } from "@/sanity/lib/live";
 import { featuredPostsQuery, recentPostsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import type { Post } from "@/sanity/types";
+import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
 
 function PlatformBadge({ platform }: { platform: string }) {
   return (
@@ -39,8 +40,9 @@ export async function TopPosts() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {posts.map((post) => (
+              <StaggerItem key={post._id}>
               <a
                 key={post._id}
                 href={post.embedUrl ?? "#"}
@@ -83,8 +85,9 @@ export async function TopPosts() {
                   )}
                 </div>
               </a>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         )}
       </Container>
     </Section>

@@ -3,6 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { StarRating } from "@/components/ui/StarRating";
+import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
 import { sanityFetch } from "@/sanity/lib/live";
 import { bookReviewsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
@@ -27,7 +28,7 @@ export async function BookReviews() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {reviews.map((review) => {
               const href = review.affiliateLink || review.associatedReelUrl || null;
               const Wrapper = href ? "a" : "div";
@@ -36,6 +37,7 @@ export async function BookReviews() {
                 : {};
 
               return (
+                <StaggerItem key={review._id}>
                 <Wrapper
                   key={review._id}
                   {...linkProps}
@@ -93,9 +95,10 @@ export async function BookReviews() {
                     </p>
                   </div>
                 </Wrapper>
+              </StaggerItem>
               );
             })}
-          </div>
+          </StaggerGrid>
         )}
       </Container>
     </Section>

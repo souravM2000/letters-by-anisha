@@ -8,6 +8,7 @@ import { urlFor } from "@/sanity/lib/image";
 import { PortableText } from "@portabletext/react";
 import { ArrowUpRight } from "lucide-react";
 import type { BrandCollab } from "@/sanity/types";
+import { StaggerGrid, StaggerItem, FadeIn } from "@/components/ui/Motion";
 
 const COLLAB_TYPE_LABEL: Record<string, string> = {
   "Sponsored Post": "Sponsored",
@@ -41,7 +42,7 @@ export async function BrandCollabs() {
           <>
             {/* Logo strip */}
             {collabsWithLogos.length > 0 && (
-              <div className="flex flex-wrap justify-center items-center gap-8 md:gap-12 mb-16 pb-16 border-b border-brand-ink/10">
+              <FadeIn className="flex flex-wrap justify-center items-center gap-8 md:gap-12 mb-16 pb-16 border-b border-brand-ink/10">
                 {collabsWithLogos.map((c) => (
                   <div key={c._id} className="relative w-24 h-12 md:w-32 md:h-16 grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all duration-300">
                     <Image
@@ -52,12 +53,13 @@ export async function BrandCollabs() {
                     />
                   </div>
                 ))}
-              </div>
+              </FadeIn>
             )}
 
             {/* Collab cards */}
-            <div className="space-y-8">
+            <StaggerGrid className="space-y-8">
               {collabs.map((collab) => (
+                <StaggerItem key={collab._id}>
                 <div
                   key={collab._id}
                   className="bg-brand-cream editorial-border p-6 md:p-8"
@@ -134,8 +136,9 @@ export async function BrandCollabs() {
                     </blockquote>
                   )}
                 </div>
+                </StaggerItem>
               ))}
-            </div>
+            </StaggerGrid>
           </>
         )}
       </Container>

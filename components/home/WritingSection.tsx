@@ -7,6 +7,7 @@ import { writingPiecesQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { ArrowUpRight } from "lucide-react";
 import type { WritingPiece } from "@/sanity/types";
+import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
 
 const CATEGORY_COLORS: Record<string, string> = {
   "Book Review": "bg-brand-crimson/10 text-brand-crimson",
@@ -34,8 +35,9 @@ export async function WritingSection() {
             </p>
           </div>
         ) : (
-          <div className="space-y-6">
+          <StaggerGrid className="space-y-6">
             {pieces.map((piece) => (
+              <StaggerItem key={piece._id}>
               <a
                 key={piece._id}
                 href={piece.externalUrl ?? "#"}
@@ -84,8 +86,9 @@ export async function WritingSection() {
                   </span>
                 </div>
               </a>
+              </StaggerItem>
             ))}
-          </div>
+          </StaggerGrid>
         )}
       </Container>
     </Section>
