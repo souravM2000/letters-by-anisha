@@ -6,7 +6,7 @@ import { client } from "@/sanity/lib/client";
 import { featuredPostsQuery, recentPostsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import type { Post } from "@/sanity/types";
-import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
+import { Carousel, CarouselItem } from "@/components/ui/Carousel";
 
 function PlatformBadge({ platform }: { platform: string }) {
   return (
@@ -46,15 +46,15 @@ export async function TopPosts() {
             </p>
           </div>
         ) : (
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-6">
+          <Carousel itemCount={posts.length}>
             {posts.map((post, index) => (
-              <StaggerItem key={post._id}>
+              <CarouselItem key={post._id} className="w-[85vw] sm:w-[320px] lg:w-[360px] shrink-0 snap-center md:snap-start h-auto flex">
               <a
                 key={post._id}
                 href={post.embedUrl ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-col h-full editorial-border bg-brand-vanilla overflow-hidden hover:shadow-lg transition-shadow duration-300 rounded-lg"
+                className="group flex flex-col w-full h-full editorial-border bg-brand-vanilla overflow-hidden hover:shadow-lg transition-shadow duration-300 rounded-lg"
               >
                 {/* Thumbnail (Compact) */}
                 <div className="relative aspect-[16/10] w-full overflow-hidden bg-brand-ink/5">
@@ -93,9 +93,9 @@ export async function TopPosts() {
                   )}
                 </div>
               </a>
-              </StaggerItem>
+              </CarouselItem>
             ))}
-          </StaggerGrid>
+          </Carousel>
         )}
       </Container>
     </Section>

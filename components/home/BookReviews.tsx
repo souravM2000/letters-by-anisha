@@ -3,7 +3,7 @@ import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { StarRating } from "@/components/ui/StarRating";
-import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
+import { Carousel, CarouselItem } from "@/components/ui/Carousel";
 import { client } from "@/sanity/lib/client";
 import { bookReviewsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
@@ -31,7 +31,7 @@ export async function BookReviews() {
             </p>
           </div>
         ) : (
-          <StaggerGrid className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Carousel itemCount={reviews.length}>
             {reviews.map((review) => {
               const href = review.affiliateLink || review.associatedReelUrl || null;
               const Wrapper = href ? "a" : "div";
@@ -40,11 +40,11 @@ export async function BookReviews() {
                 : {};
 
               return (
-                <StaggerItem key={review._id}>
+                <CarouselItem key={review._id} className="w-[85vw] sm:w-[320px] lg:w-[360px] shrink-0 snap-center md:snap-start h-auto flex">
                 <Wrapper
                   key={review._id}
                   {...linkProps}
-                  className="group bg-brand-cream editorial-border overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 rounded-lg h-full"
+                  className="group w-full bg-brand-cream editorial-border overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 rounded-lg h-full"
                 >
                   {/* Compact Book Cover Display */}
                   <div className="py-5 px-4 bg-brand-ink/[0.02] flex items-center justify-center border-b border-brand-ink/10">
@@ -101,10 +101,10 @@ export async function BookReviews() {
                     </p>
                   </div>
                 </Wrapper>
-              </StaggerItem>
+              </CarouselItem>
               );
             })}
-          </StaggerGrid>
+          </Carousel>
         )}
       </Container>
     </Section>

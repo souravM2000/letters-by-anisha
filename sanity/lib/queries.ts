@@ -105,7 +105,13 @@ export const writingPiecesQuery = defineQuery(`
 export const aboutQuery = defineQuery(`
   *[_type == "about"][0] {
     intro,
-    education,
+    "education": education[] {
+      institution,
+      degree,
+      year,
+      passingYear,
+      scoreLabel
+    },
     skills
   }
 `);

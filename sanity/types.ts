@@ -53,6 +53,7 @@ export interface EducationItem {
   institution: string;
   degree: string;
   year?: string;
+  passingYear?: number | null;
   scoreLabel?: string;
 }
 

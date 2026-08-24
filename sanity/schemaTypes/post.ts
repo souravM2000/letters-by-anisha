@@ -58,7 +58,7 @@ export const post = defineType({
     defineField({
       name: 'publishedDate',
       title: 'Published Date',
-      type: 'datetime',
+      type: 'date',
     }),
     defineField({
       name: 'featured',

@@ -70,7 +70,7 @@ export const brandCollab = defineType({
     defineField({
       name: 'date',
       title: 'Collaboration Date',
-      type: 'datetime',
+      type: 'date',
     }),
   ],
   preview: {

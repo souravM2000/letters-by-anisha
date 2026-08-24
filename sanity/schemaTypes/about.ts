@@ -35,9 +35,21 @@ export const about = defineType({
             }),
             defineField({
               name: 'year',
-              title: 'Year / Duration',
+              title: 'Duration / Period',
               type: 'string',
-              description: 'e.g. "2022–2024" or "2024"',
+              description: 'Display label, e.g. "2022–2024" or "Class of 2024"',
+            }),
+            defineField({
+              name: 'passingYear',
+              title: 'Passing Year',
+              type: 'number',
+              description: 'The year you graduated / passed out. Used for sorting.',
+              options: {
+                list: Array.from({ length: 31 }, (_, i) => {
+                  const y = 2000 + i;
+                  return { title: String(y), value: y };
+                }),
+              },
             }),
             defineField({
               name: 'scoreLabel',
@@ -47,7 +59,13 @@ export const about = defineType({
             }),
           ],
           preview: {
-            select: { title: 'degree', subtitle: 'institution' },
+            select: { title: 'degree', subtitle: 'institution', passingYear: 'passingYear' },
+            prepare({ title, subtitle, passingYear }: { title?: string; subtitle?: string; passingYear?: number }) {
+              return {
+                title,
+                subtitle: [subtitle, passingYear].filter(Boolean).join(' · '),
+              };
+            },
           },
         }),
       ],

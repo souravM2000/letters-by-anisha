@@ -7,7 +7,7 @@ import { writingPiecesQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import { ArrowUpRight } from "lucide-react";
 import type { WritingPiece } from "@/sanity/types";
-import { StaggerGrid, StaggerItem } from "@/components/ui/Motion";
+import { Carousel, CarouselItem } from "@/components/ui/Carousel";
 
 const CATEGORY_COLORS: Record<string, string> = {
   "Book Review": "bg-brand-crimson/10 text-brand-crimson",
@@ -38,24 +38,24 @@ export async function WritingSection() {
             </p>
           </div>
         ) : (
-          <StaggerGrid className="space-y-4 sm:space-y-5">
+          <Carousel itemCount={pieces.length}>
             {pieces.map((piece) => (
-              <StaggerItem key={piece._id}>
+              <CarouselItem key={piece._id} className="w-[85vw] sm:w-[350px] lg:w-[400px] shrink-0 snap-center md:snap-start h-auto flex">
               <a
                 key={piece._id}
                 href={piece.externalUrl ?? "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex flex-row items-start gap-4 sm:gap-6 p-4 sm:p-5 bg-brand-vanilla editorial-border hover:shadow-md transition-all duration-300 rounded-lg"
+                className="group w-full flex flex-col items-start gap-4 p-4 sm:p-5 bg-brand-vanilla editorial-border hover:shadow-md transition-all duration-300 rounded-lg h-full"
               >
                 {/* Optional cover image (Compact) */}
                 {piece.coverImage && (
-                  <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 aspect-square shrink-0 rounded-lg overflow-hidden border border-brand-ink/10 bg-brand-cream shadow-xs">
+                  <div className="relative w-full aspect-[2/1] sm:aspect-[16/9] shrink-0 rounded-lg overflow-hidden border border-brand-ink/10 bg-brand-cream shadow-xs">
                     <Image
-                      src={urlFor(piece.coverImage).width(240).height(240).url()}
+                      src={urlFor(piece.coverImage).width(400).height(225).url()}
                       alt={piece.title ?? "Article cover"}
                       fill
-                      sizes="(max-width: 640px) 80px, 112px"
+                      sizes="(max-width: 640px) 100vw, 400px"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
                   </div>
@@ -90,9 +90,9 @@ export async function WritingSection() {
                   </span>
                 </div>
               </a>
-              </StaggerItem>
+              </CarouselItem>
             ))}
-          </StaggerGrid>
+          </Carousel>
         )}
       </Container>
     </Section>

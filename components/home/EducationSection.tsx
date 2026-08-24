@@ -36,7 +36,9 @@ export async function EducationSection() {
               </h3>
 
               <div className="space-y-6">
-                {aboutData?.education?.map((edu: EducationItem, i: number) => (
+                {[...(aboutData?.education ?? [])]
+                  .sort((a, b) => (b.passingYear ?? 0) - (a.passingYear ?? 0))
+                  .map((edu: EducationItem, i: number) => (
                   <div
                     key={i}
                     className={`flex flex-col ${
