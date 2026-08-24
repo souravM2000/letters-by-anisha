@@ -1,5 +1,14 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Plus_Jakarta_Sans, Caveat } from "next/font/google";
+import {
+  Playfair_Display,
+  Plus_Jakarta_Sans,
+  Caveat,
+  Cormorant_Garamond,
+  Lora,
+  DM_Serif_Display,
+  Montserrat,
+  EB_Garamond,
+} from "next/font/google";
 import "./globals.css";
 import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
@@ -18,6 +27,33 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 
 const caveat = Caveat({
   variable: "--font-caveat",
+  subsets: ["latin"],
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const lora = Lora({
+  variable: "--font-lora",
+  subsets: ["latin"],
+});
+
+const dmSerifDisplay = DM_Serif_Display({
+  variable: "--font-dm-serif",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
+  subsets: ["latin"],
+});
+
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
   subsets: ["latin"],
 });
 
@@ -90,7 +126,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${playfair.variable} ${plusJakartaSans.variable} ${caveat.variable} h-full antialiased`}
+      className={`${playfair.variable} ${plusJakartaSans.variable} ${caveat.variable} ${cormorantGaramond.variable} ${lora.variable} ${dmSerifDisplay.variable} ${montserrat.variable} ${ebGaramond.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-brand-cream text-brand-ink selection:bg-brand-terracotta selection:text-white">
         {children}

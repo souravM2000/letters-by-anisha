@@ -10,6 +10,13 @@
   --font-sans: var(--font-plus-jakarta);
   --font-serif: var(--font-playfair);
   --font-handwritten: var(--font-caveat);
+
+  /* Extended portfolio fonts */
+  --font-cormorant: var(--font-cormorant);
+  --font-lora: var(--font-lora);
+  --font-dm-serif: var(--font-dm-serif);
+  --font-montserrat: var(--font-montserrat);
+  --font-eb-garamond: var(--font-eb-garamond);
 }
 
 /* Subtle paper grain background utility */

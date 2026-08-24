@@ -64,6 +64,8 @@ export interface SkillCategory {
 
 export interface About {
   intro?: PortableTextBlock[] | null;
+  introFont?: 'sans' | 'serif' | 'handwritten' | 'cormorant' | 'lora' | 'dm-serif' | 'montserrat' | 'eb-garamond' | null;
+  introFontSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | null;
   education?: EducationItem[] | null;
   skills?: SkillCategory[] | null;
 }

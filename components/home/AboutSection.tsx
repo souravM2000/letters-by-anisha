@@ -4,7 +4,7 @@ import { Section } from "@/components/ui/Section";
 import { client } from "@/sanity/lib/client";
 import { aboutQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
-import { FileDown } from "lucide-react";
+import { FileDown, Sparkles } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
 import { SocialIcon, formatSocialUrl } from "@/components/ui/SocialIcon";
 import type { About, SiteSettings, SocialLink } from "@/sanity/types";
@@ -57,11 +57,33 @@ export async function AboutSection() {
                <p className="text-brand-ink/40">Story coming soon</p>
             ) : (
               <>
-                {aboutData.intro && (
-                  <div className="prose prose-lg prose-brand text-brand-ink/90 leading-relaxed mb-12">
-                    <PortableText value={aboutData.intro} />
-                  </div>
-                )}
+                {aboutData.intro && (() => {
+                  const fontClassMap: Record<string, string> = {
+                    sans: 'font-sans',
+                    serif: 'font-serif',
+                    handwritten: 'font-handwritten',
+                    cormorant: 'font-cormorant',
+                    lora: 'font-lora',
+                    'dm-serif': 'font-dm-serif',
+                    montserrat: 'font-montserrat',
+                    'eb-garamond': 'font-eb-garamond',
+                  };
+                  const sizeClassMap: Record<string, string> = {
+                    xs: 'text-xs',
+                    sm: 'text-sm',
+                    base: 'text-base',
+                    lg: 'text-lg',
+                    xl: 'text-xl',
+                    '2xl': 'text-2xl',
+                  };
+                  const introFontClass = fontClassMap[aboutData.introFont ?? 'sans'] ?? 'font-sans';
+                  const introSizeClass = sizeClassMap[aboutData.introFontSize ?? 'base'] ?? 'text-base';
+                  return (
+                    <div className={`prose prose-brand text-brand-ink/90 leading-relaxed mb-12 ${introFontClass} ${introSizeClass}`}>
+                      <PortableText value={aboutData.intro} />
+                    </div>
+                  );
+                })()}
               </>
             )}
 
@@ -103,6 +125,15 @@ export async function AboutSection() {
                     <FileDown className="w-4 h-4" />
                   </a>
                 )}
+                <a
+                  href="https://anisha-ghosh-portfolio.my.canva.site"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-6 py-2 rounded-full bg-brand-terracotta text-brand-cream hover:bg-brand-crimson transition-all text-sm font-medium"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Creative Portfolio</span>
+                </a>
               </div>
             </div>
           </div>
