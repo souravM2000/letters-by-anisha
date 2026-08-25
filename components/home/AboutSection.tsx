@@ -47,7 +47,7 @@ export async function AboutSection() {
           {/* Right Column: About Text & Connect */}
           <div className="flex flex-col pt-4 lg:pt-8">
             <span className="font-handwritten text-3xl md:text-4xl text-brand-terracotta mb-2 block">
-              Meet the author
+              Meet the Creator
             </span>
             <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight text-brand-crimson font-medium mb-8">
               About
@@ -114,26 +114,28 @@ export async function AboutSection() {
                   })}
                 </div>
 
-                {(settingsData as any)?.resumeUrl && (
+                <div className="flex flex-col gap-2.5">
+                  {(settingsData as any)?.resumeUrl && (
+                    <a
+                      href={(settingsData as any).resumeUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 px-6 py-2 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-all text-sm font-medium"
+                    >
+                      <span>Download Portfolio (PDF)</span>
+                      <FileDown className="w-4 h-4" />
+                    </a>
+                  )}
                   <a
-                    href={(settingsData as any).resumeUrl}
+                    href="https://anisha-ghosh-portfolio.my.canva.site"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-2 px-6 py-2 rounded-full border border-brand-terracotta text-brand-crimson hover:bg-brand-terracotta hover:text-brand-cream transition-all text-sm font-medium"
+                    className="flex items-center justify-center gap-2 px-6 py-2 rounded-full bg-brand-crimson text-brand-cream hover:bg-brand-terracotta transition-all text-sm font-medium"
                   >
-                    <span>Download Portfolio (PDF)</span>
-                    <FileDown className="w-4 h-4" />
+                    <Sparkles className="w-4 h-4" />
+                    <span>Creative Portfolio (Canva)</span>
                   </a>
-                )}
-                <a
-                  href="https://anisha-ghosh-portfolio.my.canva.site"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-2 rounded-full bg-brand-terracotta text-brand-cream hover:bg-brand-crimson transition-all text-sm font-medium"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Creative Portfolio</span>
-                </a>
+                </div>
               </div>
             </div>
           </div>
