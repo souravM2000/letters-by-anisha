@@ -81,6 +81,7 @@ export interface BookReview {
   rating: number;
   genre?: string[] | null;
   reviewExcerpt: string;
+  fullReview?: PortableTextBlock[] | null;
   affiliateLink?: string | null;
   associatedReelUrl?: string | null;
   publishedDate: string;
@@ -127,3 +128,17 @@ export interface WritingPiece {
   publishedDate: string;
   featured?: boolean;
 }
+
+// ── Shelf & Studio Pick ─────────────────────────────────────────────────────
+
+export interface ShelfPick {
+  _id: string;
+  name: string;
+  category: string;
+  image?: SanityImage | null;
+  description?: string | null;
+  buyLink?: string | null;
+  relatedVideoUrl?: string | null;
+  featured?: boolean;
+}
+

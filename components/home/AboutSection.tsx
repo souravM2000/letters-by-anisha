@@ -115,9 +115,9 @@ export async function AboutSection() {
                 </div>
 
                 <div className="flex flex-col gap-2.5">
-                  {(settingsData as any)?.resumeUrl && (
+                  {settingsData?.resumeUrl && (
                     <a
-                      href={(settingsData as any).resumeUrl}
+                      href={settingsData.resumeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center justify-center gap-2 px-6 py-2 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-all text-sm font-medium"

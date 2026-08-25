@@ -64,6 +64,7 @@ export const bookReviewsQuery = defineQuery(`
     rating,
     genre,
     reviewExcerpt,
+    fullReview,
     affiliateLink,
     associatedReelUrl,
     publishedDate,
@@ -115,5 +116,19 @@ export const aboutQuery = defineQuery(`
       scoreLabel
     },
     skills
+  }
+`);
+
+// ─── Shelf & Studio Picks ───────────────────────────────────────────────────
+export const shelfPicksQuery = defineQuery(`
+  *[_type == "shelfPick"] | order(featured desc, _createdAt desc) {
+    _id,
+    name,
+    category,
+    image,
+    description,
+    buyLink,
+    relatedVideoUrl,
+    featured
   }
 `);

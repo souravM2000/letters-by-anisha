@@ -5,7 +5,7 @@ import { client } from "@/sanity/lib/client";
 import { aboutQuery } from "@/sanity/lib/queries";
 import { GraduationCap, Sparkles } from "lucide-react";
 import type { About, EducationItem, SkillCategory } from "@/sanity/types";
-import { FadeUp, StaggerGrid, StaggerItem } from "@/components/ui/Motion";
+import { FadeUp } from "@/components/ui/Motion";
 
 export async function EducationSection() {
   const aboutData = await client.fetch<About | null>(

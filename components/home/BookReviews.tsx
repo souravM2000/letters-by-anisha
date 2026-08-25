@@ -1,13 +1,11 @@
-import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { StarRating } from "@/components/ui/StarRating";
 import { Carousel, CarouselItem } from "@/components/ui/Carousel";
 import { client } from "@/sanity/lib/client";
 import { bookReviewsQuery } from "@/sanity/lib/queries";
-import { urlFor } from "@/sanity/lib/image";
 import type { BookReview } from "@/sanity/types";
+import { BookReviewCard } from "@/components/home/BookReviewCard";
 
 export async function BookReviews() {
   const reviews = await client.fetch<BookReview[] | null>(
@@ -32,78 +30,14 @@ export async function BookReviews() {
           </div>
         ) : (
           <Carousel itemCount={reviews.length}>
-            {reviews.map((review) => {
-              const href = review.affiliateLink || review.associatedReelUrl || null;
-              const Wrapper = href ? "a" : "div";
-              const linkProps = href
-                ? { href, target: "_blank" as const, rel: "noopener noreferrer" }
-                : {};
-
-              return (
-                <CarouselItem key={review._id} className="w-[85vw] sm:w-[320px] lg:w-[360px] shrink-0 snap-center md:snap-start h-auto flex">
-                <Wrapper
-                  key={review._id}
-                  {...linkProps}
-                  className="group w-full bg-brand-cream editorial-border overflow-hidden flex flex-col hover:shadow-lg transition-shadow duration-300 rounded-lg h-full"
-                >
-                  {/* Compact Book Cover Display */}
-                  <div className="py-5 px-4 bg-brand-ink/[0.02] flex items-center justify-center border-b border-brand-ink/10">
-                    <div className="relative w-24 sm:w-28 aspect-[2/3] shadow-md rounded-sm overflow-hidden bg-brand-vanilla">
-                      {review.coverImage ? (
-                        <Image
-                          src={urlFor(review.coverImage).width(300).height(450).url()}
-                          alt={`Cover of ${review.bookTitle}`}
-                          fill
-                          sizes="120px"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="font-serif text-brand-ink/20 text-xs italic">
-                            No cover
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Card body */}
-                  <div className="p-4 sm:p-5 flex flex-col flex-1">
-                    <h3 className="font-serif text-lg text-brand-ink mb-1 group-hover:text-brand-crimson transition-colors line-clamp-1 font-medium">
-                      {review.bookTitle}
-                    </h3>
-                    <p className="text-xs text-brand-ink/60 mb-2.5 italic">
-                      by {review.author}
-                    </p>
-
-                    {/* Rating */}
-                    {review.rating != null && (
-                      <StarRating rating={review.rating} className="mb-2.5" />
-                    )}
-
-                    {/* Genre tags */}
-                    {review.genre && review.genre.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 mb-2.5">
-                        {review.genre.map((g: string) => (
-                          <span
-                            key={g}
-                            className="text-[10px] px-2 py-0.5 bg-brand-terracotta/10 text-brand-terracotta rounded-sm uppercase tracking-wider font-medium"
-                          >
-                            {g}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Excerpt */}
-                    <p className="text-xs sm:text-sm text-brand-ink/70 leading-relaxed line-clamp-2 mt-auto">
-                      {review.reviewExcerpt}
-                    </p>
-                  </div>
-                </Wrapper>
+            {reviews.map((review) => (
+              <CarouselItem
+                key={review._id}
+                className="w-[85vw] sm:w-[320px] lg:w-[360px] shrink-0 snap-center md:snap-start h-auto flex"
+              >
+                <BookReviewCard review={review} />
               </CarouselItem>
-              );
-            })}
+            ))}
           </Carousel>
         )}
       </Container>

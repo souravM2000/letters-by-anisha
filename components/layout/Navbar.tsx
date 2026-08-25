@@ -2,22 +2,24 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { Container } from "../ui/Container";
 
 const NAV_LINKS = [
-  { name: "About", href: "#about" },
-  { name: "Reach", href: "#reach" },
-  { name: "Top Posts", href: "#posts" },
-  { name: "Collabs", href: "#collabs" },
-  { name: "Reviews", href: "#reviews" },
-  { name: "Writing", href: "#writing" },
-  { name: "Education", href: "#education" },
+  { name: "About", href: "/#about" },
+  { name: "Top Posts", href: "/#posts" },
+  { name: "Collabs", href: "/#collabs" },
+  { name: "Reviews", href: "/#reviews" },
+  { name: "Writing", href: "/#writing" },
+  { name: "Shop My Picks", href: "/shelf", highlight: true },
 ];
 
 export function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,16 +30,26 @@ export function Navbar() {
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
-    if (href.startsWith("#")) {
+    setMobileMenuOpen(false);
+    // Hash link on the home page
+    if (href.startsWith("/#")) {
       e.preventDefault();
-      const target = document.querySelector(href);
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth" });
-        window.history.pushState(null, "", href);
+      const hash = href.slice(1); // -> "#about"
+      if (pathname === "/") {
+        // Already on home — smooth scroll
+        const target = document.querySelector(hash);
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth" });
+          window.history.pushState(null, "", hash);
+        }
+      } else {
+        // Navigate to home then let browser handle hash
+        router.push(href);
       }
     }
-    setMobileMenuOpen(false);
+    // Pure path links (/shelf etc.) — let Next.js <Link> handle them naturally
   };
+
 
   return (
     <header
@@ -58,14 +70,25 @@ export function Navbar() {
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center space-x-8">
           {NAV_LINKS.map((link) => (
-            <a
-              key={link.name}
-              href={link.href}
-              onClick={(e) => handleNavClick(e, link.href)}
-              className="text-brand-ink/80 hover:text-brand-crimson transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer"
-            >
-              {link.name}
-            </a>
+            link.highlight ? (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-brand-crimson hover:text-brand-terracotta transition-colors font-semibold text-sm tracking-wide uppercase cursor-pointer"
+              >
+                {link.name}
+              </a>
+            ) : (
+              <a
+                key={link.name}
+                href={link.href}
+                onClick={(e) => handleNavClick(e, link.href)}
+                className="text-brand-ink/80 hover:text-brand-crimson transition-colors font-medium text-sm tracking-wide uppercase cursor-pointer"
+              >
+                {link.name}
+              </a>
+            )
           ))}
         </nav>
 
@@ -87,7 +110,11 @@ export function Navbar() {
               key={link.name}
               href={link.href}
               onClick={(e) => handleNavClick(e, link.href)}
-              className="text-brand-ink/90 hover:text-brand-crimson transition-colors text-lg font-medium uppercase tracking-wide py-2 border-b border-brand-ink/5 cursor-pointer"
+              className={`transition-colors text-lg font-medium uppercase tracking-wide py-2 border-b border-brand-ink/5 cursor-pointer ${
+                link.highlight
+                  ? "text-brand-crimson font-semibold"
+                  : "text-brand-ink/90 hover:text-brand-crimson"
+              }`}
             >
               {link.name}
             </a>

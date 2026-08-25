@@ -5,6 +5,7 @@ import { bookReview } from './bookReview'
 import { post } from './post'
 import { brandCollab } from './brandCollab'
 import { writingPiece } from './writingPiece'
+import { shelfPick } from './shelfPick'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -16,5 +17,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     post,
     brandCollab,
     writingPiece,
+    shelfPick,
   ],
 }
+

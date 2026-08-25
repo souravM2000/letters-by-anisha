@@ -52,13 +52,14 @@ export async function Footer() {
             </div>
             
             <nav className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">
-              <Link href="#about" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">About</Link>
-              <Link href="#social" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Social</Link>
-              <Link href="#posts" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Top Posts</Link>
-              <Link href="#collabs" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Collabs</Link>
-              <Link href="#reviews" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Reviews</Link>
-              <Link href="#writing" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Writing</Link>
-              <Link href="#contact" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Contact</Link>
+              <Link href="/#about" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">About</Link>
+              <Link href="/#social" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Social</Link>
+              <Link href="/#posts" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Top Posts</Link>
+              <Link href="/#collabs" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Collabs</Link>
+              <Link href="/#reviews" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Reviews</Link>
+              <Link href="/#writing" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Writing</Link>
+              <Link href="/shelf" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Shop My Picks</Link>
+              <Link href="/#contact" className="text-sm uppercase tracking-wider hover:text-brand-terracotta transition-colors">Contact</Link>
             </nav>
           </div>
 
