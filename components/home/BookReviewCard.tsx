@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { X, ExternalLink, ShoppingCart, BookOpen } from "lucide-react";
@@ -16,7 +17,13 @@ interface BookReviewCardProps {
 
 export function BookReviewCard({ review }: BookReviewCardProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const hasFullReview = Boolean(review.fullReview && review.fullReview.length > 0);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
 
   // Close modal on Escape key and lock body scroll
   useEffect(() => {
@@ -157,169 +164,175 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
       </div>
 
       {/* Full Review Animated Popup Modal */}
-      <AnimatePresence>
-        {isOpen && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.25 }}
-              onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-brand-ink/60 backdrop-blur-xs cursor-pointer"
-              aria-hidden="true"
-            />
-
-            {/* Modal Dialog Card */}
-            <motion.div
-              role="dialog"
-              aria-modal="true"
-              aria-labelledby={`review-modal-title-${review._id}`}
-              initial={{ opacity: 0, scale: 0.94, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.94, y: 20 }}
-              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-              className="relative w-full max-w-2xl bg-brand-cream border border-brand-crimson/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] z-10"
-              onClick={(e) => e.stopPropagation()}
-            >
-              {/* Header Bar */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-brand-ink/10 bg-brand-vanilla">
-                <span className="font-handwritten text-2xl text-brand-terracotta">
-                  Book Review
-                </span>
-                <button
-                  type="button"
+      {mounted &&
+        createPortal(
+          <AnimatePresence>
+            {isOpen && (
+              <div
+                className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8"
+              >
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.25 }}
                   onClick={() => setIsOpen(false)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-brand-ink/70 hover:text-brand-crimson hover:bg-brand-ink/5 transition-colors cursor-pointer"
-                  aria-label="Close review"
+                  className="fixed inset-0 bg-brand-ink/60 backdrop-blur-xs cursor-pointer"
+                  aria-hidden="true"
+                />
+
+                {/* Modal Dialog Card */}
+                <motion.div
+                  role="dialog"
+                  aria-modal="true"
+                  aria-labelledby={`review-modal-title-${review._id}`}
+                  initial={{ opacity: 0, scale: 0.94, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.94, y: 20 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  className="relative w-full max-w-2xl bg-brand-cream border border-brand-crimson/20 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[88vh] z-10 mx-auto my-auto"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
-
-              {/* Modal Body (Scrollable) */}
-              <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
-                {/* Book Header info */}
-                <div className="flex flex-col sm:flex-row gap-6 items-start">
-                  {/* Book Cover */}
-                  <div className="relative w-28 sm:w-36 aspect-[2/3] shrink-0 shadow-lg rounded-md overflow-hidden bg-brand-vanilla border border-brand-ink/10 mx-auto sm:mx-0">
-                    {review.coverImage ? (
-                      <Image
-                        src={urlFor(review.coverImage).width(400).height(600).url()}
-                        alt={`Cover of ${review.bookTitle}`}
-                        fill
-                        sizes="160px"
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center">
-                        <span className="font-serif text-brand-ink/20 text-xs italic">
-                          No cover
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Meta details */}
-                  <div className="flex-1 space-y-2.5 text-center sm:text-left">
-                    <h2
-                      id={`review-modal-title-${review._id}`}
-                      className="font-serif text-2xl sm:text-3xl text-brand-crimson font-medium leading-tight"
+                  {/* Header Bar */}
+                  <div className="relative flex items-center justify-center px-6 py-4 border-b border-brand-ink/10 bg-brand-vanilla">
+                    <span className="font-handwritten text-2xl text-brand-terracotta">
+                      Book Review
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsOpen(false)}
+                      className="absolute right-4 sm:right-6 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full flex items-center justify-center text-brand-ink/70 hover:text-brand-crimson hover:bg-brand-ink/5 transition-colors cursor-pointer"
+                      aria-label="Close review"
                     >
-                      {review.bookTitle}
-                    </h2>
-                    <p className="text-sm sm:text-base text-brand-ink/70 italic">
-                      by {review.author}
-                    </p>
+                      <X className="w-5 h-5" />
+                    </button>
+                  </div>
 
-                    {review.rating != null && (
-                      <div className="flex justify-center sm:justify-start">
-                        <StarRating rating={review.rating} />
-                      </div>
-                    )}
-
-                    {review.genre && review.genre.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5 justify-center sm:justify-start pt-1">
-                        {review.genre.map((g: string) => (
-                          <span
-                            key={g}
-                            className="text-xs px-2.5 py-0.5 bg-brand-terracotta/10 text-brand-terracotta rounded-full uppercase tracking-wider font-medium"
-                          >
-                            {g}
+                  {/* Modal Body (Scrollable) */}
+                  <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
+                  {/* Book Header info */}
+                  <div className="flex flex-col gap-5 items-center text-center">
+                    {/* Book Cover */}
+                    <div className="relative w-32 sm:w-40 aspect-[2/3] shrink-0 shadow-lg rounded-md overflow-hidden bg-brand-vanilla border border-brand-ink/10 mx-auto">
+                      {review.coverImage ? (
+                        <Image
+                          src={urlFor(review.coverImage).width(400).height(600).url()}
+                          alt={`Cover of ${review.bookTitle}`}
+                          fill
+                          sizes="160px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="font-serif text-brand-ink/20 text-xs italic">
+                            No cover
                           </span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
+                        </div>
+                      )}
+                    </div>
 
-                {/* Excerpt callout */}
-                {review.reviewExcerpt && (
-                  <div className="p-4 rounded-xl bg-brand-terracotta/5 border-l-3 border-brand-crimson italic text-brand-ink/80 text-sm sm:text-base leading-relaxed">
-                    &ldquo;{review.reviewExcerpt}&rdquo;
-                  </div>
-                )}
+                    {/* Meta details */}
+                    <div className="flex-1 space-y-2.5 w-full max-w-md mx-auto">
+                      <h2
+                        id={`review-modal-title-${review._id}`}
+                        className="font-serif text-2xl sm:text-3xl text-brand-crimson font-medium leading-tight"
+                      >
+                        {review.bookTitle}
+                      </h2>
+                      <p className="text-sm sm:text-base text-brand-ink/70 italic">
+                        by {review.author}
+                      </p>
 
-                {/* Full Review Content */}
-                {hasFullReview ? (
-                  <div className="space-y-3 pt-2">
-                    <h4 className="font-serif text-lg text-brand-crimson font-medium">
-                      Full Review
-                    </h4>
-                    <div className="prose prose-brand text-brand-ink/90 leading-relaxed font-sans max-w-none text-sm sm:text-base">
-                      <PortableText value={review.fullReview!} />
+                      {review.rating != null && (
+                        <div className="flex justify-center">
+                          <StarRating rating={review.rating} />
+                        </div>
+                      )}
+
+                      {review.genre && review.genre.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 justify-center pt-1">
+                          {review.genre.map((g: string) => (
+                            <span
+                              key={g}
+                              className="text-xs px-2.5 py-0.5 bg-brand-terracotta/10 text-brand-terracotta rounded-full uppercase tracking-wider font-medium"
+                            >
+                              {g}
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </div>
-                ) : !review.reviewExcerpt ? (
-                  <p className="text-brand-ink/50 text-sm italic">
-                    No review text provided yet.
-                  </p>
-                ) : null}
-              </div>
 
-              {/* Modal Footer / Action Bar */}
-              <div className="px-6 py-4 bg-brand-vanilla border-t border-brand-ink/10 flex flex-wrap items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-3">
-                  {review.affiliateLink && (
-                    <a
-                      href={review.affiliateLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-5 py-2 rounded-full bg-brand-crimson text-brand-cream hover:bg-brand-terracotta transition-colors text-sm font-medium shadow-xs"
+                    {/* Excerpt callout */}
+                    {review.reviewExcerpt && (
+                      <div className="p-4 rounded-xl bg-brand-terracotta/5 border-t-3 border-b-3 border-brand-crimson/20 italic text-brand-ink/80 text-sm sm:text-base leading-relaxed text-center">
+                        &ldquo;{review.reviewExcerpt}&rdquo;
+                      </div>
+                    )}
+
+                    {/* Full Review Content */}
+                    {hasFullReview ? (
+                      <div className="space-y-3 pt-2">
+                        <h4 className="font-serif text-lg text-brand-crimson font-medium text-center">
+                          Full Review
+                        </h4>
+                        <div className="prose prose-brand text-brand-ink/90 leading-relaxed font-sans max-w-none text-sm sm:text-base text-left">
+                          <PortableText value={review.fullReview!} />
+                        </div>
+                      </div>
+                    ) : !review.reviewExcerpt ? (
+                      <p className="text-brand-ink/50 text-sm italic text-center">
+                        No review text provided yet.
+                      </p>
+                    ) : null}
+                  </div>
+
+                  {/* Modal Footer / Action Bar */}
+                  <div className="px-6 py-5 bg-brand-vanilla border-t border-brand-ink/10 flex flex-col items-center gap-4">
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                      {review.affiliateLink && (
+                        <a
+                          href={review.affiliateLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-5 py-2 rounded-full bg-brand-crimson text-brand-cream hover:bg-brand-terracotta transition-colors text-sm font-medium shadow-xs"
+                        >
+                          <ShoppingCart className="w-4 h-4" />
+                          <span>Buy Link</span>
+                          <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+                        </a>
+                      )}
+
+                      {review.associatedReelUrl && (
+                        <a
+                          href={review.associatedReelUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-2 px-5 py-2 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-colors text-sm font-medium"
+                        >
+                          <SocialIcon platform="instagram" className="w-4 h-4" />
+                          <span>Watch on Instagram</span>
+                          <ExternalLink className="w-3.5 h-3.5 opacity-70" />
+                        </a>
+                      )}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={() => setIsOpen(false)}
+                      className="px-6 py-2 rounded-full border border-brand-ink/20 text-brand-ink/70 hover:text-brand-ink hover:bg-brand-ink/5 transition-colors text-sm font-medium cursor-pointer"
                     >
-                      <ShoppingCart className="w-4 h-4" />
-                      <span>Buy Link</span>
-                      <ExternalLink className="w-3.5 h-3.5 opacity-70" />
-                    </a>
-                  )}
-
-                  {review.associatedReelUrl && (
-                    <a
-                      href={review.associatedReelUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-2 px-5 py-2 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-colors text-sm font-medium"
-                    >
-                      <SocialIcon platform="instagram" className="w-4 h-4" />
-                      <span>Watch on Instagram</span>
-                      <ExternalLink className="w-3.5 h-3.5 opacity-70" />
-                    </a>
-                  )}
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 rounded-full text-brand-ink/70 hover:text-brand-ink hover:bg-brand-ink/5 transition-colors text-sm font-medium cursor-pointer ml-auto"
-                >
-                  Close
-                </button>
+                      Close
+                    </button>
+                  </div>
+                </motion.div>
               </div>
-            </motion.div>
-          </div>
+            )}
+          </AnimatePresence>,
+          document.body
         )}
-      </AnimatePresence>
     </>
   );
 }

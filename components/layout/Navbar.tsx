@@ -10,8 +10,8 @@ const NAV_LINKS = [
   { name: "About", href: "/#about" },
   { name: "Top Posts", href: "/#posts" },
   { name: "Collabs", href: "/#collabs" },
-  { name: "Reviews", href: "/#reviews" },
-  { name: "Writing", href: "/#writing" },
+  { name: "Reviews", href: "/reviews" },
+  { name: "Writing", href: "/writing" },
   { name: "Shop My Picks", href: "/shelf", highlight: true },
 ];
 
@@ -46,8 +46,11 @@ export function Navbar() {
         // Navigate to home then let browser handle hash
         router.push(href);
       }
+    } else {
+      // Pure path links (/reviews, /writing, /shelf)
+      e.preventDefault();
+      router.push(href);
     }
-    // Pure path links (/shelf etc.) — let Next.js <Link> handle them naturally
   };
 
 
