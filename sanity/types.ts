@@ -109,12 +109,16 @@ export interface BrandCollab {
   brandLogo?: SanityImage | null;
   collabType?: string | null;
   description?: PortableTextBlock[] | null;
+  collabUrl?: string | null;
+  brandUrl?: string | null;
+  projectUrl?: string | null;
+  date?: string | null;
+  featured?: boolean | null;
   testimonialQuote?: string | null;
   testimonialAuthor?: string | null;
   resultsOrMetrics?: string | null;
-  projectUrl?: string | null;
-  date: string;
 }
+
 
 // ── Writing Piece ───────────────────────────────────────────────────────────
 
@@ -125,9 +129,11 @@ export interface WritingPiece {
   externalUrl: string;
   excerpt: string;
   coverImage?: SanityImage | null;
+  metaImage?: string | null;
   publishedDate: string;
   featured?: boolean;
 }
+
 
 // ── Shelf & Studio Pick ─────────────────────────────────────────────────────
 

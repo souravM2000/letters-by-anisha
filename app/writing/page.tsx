@@ -6,6 +6,8 @@ import { writingPiecesQuery } from "@/sanity/lib/queries";
 import type { WritingPiece } from "@/sanity/types";
 import { WritingClient } from "@/components/writing/WritingClient";
 
+import { enrichWritingPiecesWithMetaImages } from "@/lib/ogImage";
+
 export const metadata: Metadata = {
   title: "Writing & Essays",
   description:
@@ -13,11 +15,14 @@ export const metadata: Metadata = {
 };
 
 export default async function WritingPage() {
-  const pieces = await client.fetch<WritingPiece[]>(
+  const rawPieces = await client.fetch<WritingPiece[]>(
     writingPiecesQuery,
     {},
     { next: { tags: ["writing"] } }
   );
+
+  const pieces = await enrichWritingPiecesWithMetaImages(rawPieces ?? []);
+
 
   return (
     <>

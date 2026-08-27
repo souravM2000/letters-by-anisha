@@ -8,6 +8,14 @@ export const brandCollab = defineType({
   icon: StarIcon,
   orderings: [
     {
+      title: 'Featured First, Then Date',
+      name: 'featuredDateDesc',
+      by: [
+        { field: 'featured', direction: 'desc' },
+        { field: 'date', direction: 'desc' },
+      ],
+    },
+    {
       title: 'Date, Newest First',
       name: 'dateDesc',
       by: [{ field: 'date', direction: 'desc' }],
@@ -25,6 +33,37 @@ export const brandCollab = defineType({
       title: 'Brand Logo',
       type: 'image',
       options: { hotspot: true },
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'description',
+      title: 'Description',
+      type: 'array',
+      of: [defineArrayMember({ type: 'block' })],
+    }),
+    defineField({
+      name: 'collabUrl',
+      title: 'Collaboration / Campaign URL',
+      type: 'url',
+      description: 'Link to the published post, video, reel, or campaign showcase',
+    }),
+    defineField({
+      name: 'brandUrl',
+      title: 'Brand Website URL',
+      type: 'url',
+      description: 'Link to the brand official website',
+    }),
+    defineField({
+      name: 'date',
+      title: 'Collaboration Date',
+      type: 'date',
+    }),
+    defineField({
+      name: 'featured',
+      title: 'Featured Collaboration',
+      type: 'boolean',
+      description: 'Feature this collaboration (invisible in the UI, used for sorting/prioritizing)',
+      initialValue: false,
     }),
     defineField({
       name: 'collabType',
@@ -38,12 +77,6 @@ export const brandCollab = defineType({
           { title: 'Long-term Partnership', value: 'Long-term Partnership' },
         ],
       },
-    }),
-    defineField({
-      name: 'description',
-      title: 'Description',
-      type: 'array',
-      of: [defineArrayMember({ type: 'block' })],
     }),
     defineField({
       name: 'testimonialQuote',
@@ -64,13 +97,9 @@ export const brandCollab = defineType({
     }),
     defineField({
       name: 'projectUrl',
-      title: 'Project / Campaign URL',
+      title: 'Project / Campaign URL (Legacy)',
       type: 'url',
-    }),
-    defineField({
-      name: 'date',
-      title: 'Collaboration Date',
-      type: 'date',
+      hidden: true,
     }),
   ],
   preview: {
@@ -81,3 +110,4 @@ export const brandCollab = defineType({
     },
   },
 })
+

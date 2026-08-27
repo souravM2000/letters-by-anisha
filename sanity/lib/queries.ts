@@ -74,19 +74,23 @@ export const bookReviewsQuery = defineQuery(`
 
 // ─── Brand Collaborations ───────────────────────────────────────────────────
 export const brandCollabsQuery = defineQuery(`
-  *[_type == "brandCollab"] | order(date desc) {
+  *[_type == "brandCollab"] | order(featured desc, date desc, _createdAt desc) {
     _id,
     brandName,
     brandLogo,
     collabType,
     description,
+    collabUrl,
+    brandUrl,
+    projectUrl,
+    date,
+    featured,
     testimonialQuote,
     testimonialAuthor,
-    resultsOrMetrics,
-    projectUrl,
-    date
+    resultsOrMetrics
   }
 `);
+
 
 // ─── Writing Pieces ─────────────────────────────────────────────────────────
 export const writingPiecesQuery = defineQuery(`

@@ -105,15 +105,20 @@ export function WritingClient({ pieces }: WritingClientProps) {
                   rel="noopener noreferrer"
                   className="group w-full flex flex-col items-start gap-4 p-5 sm:p-6 bg-brand-vanilla editorial-border hover:shadow-lg transition-all duration-300 rounded-xl h-full relative overflow-hidden"
                 >
-                  {/* Optional cover image */}
-                  {piece.coverImage && (
+                  {/* Cover image or meta Open Graph image */}
+                  {(piece.coverImage || piece.metaImage) && (
                     <div className="relative w-full aspect-[16/9] shrink-0 rounded-lg overflow-hidden border border-brand-ink/10 bg-brand-cream shadow-xs">
                       <Image
-                        src={urlFor(piece.coverImage).width(600).height(338).url()}
+                        src={
+                          piece.coverImage
+                            ? urlFor(piece.coverImage).width(600).height(338).url()
+                            : piece.metaImage!
+                        }
                         alt={piece.title ?? "Article cover"}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized={Boolean(piece.metaImage && !piece.coverImage)}
                       />
                     </div>
                   )}

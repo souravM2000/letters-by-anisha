@@ -19,24 +19,26 @@ export async function BookReviews() {
     <Section id="reviews" bgClass="bg-brand-cream">
       <Container>
         {/* Section Header with Top-Right Action */}
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8 md:mb-10">
-          <div>
+        <div className="relative mb-8 md:mb-10">
+          <div className="text-center max-w-2xl mx-auto">
             <span className="font-handwritten text-2xl text-brand-terracotta mb-1 inline-block">
               Latest Reads
             </span>
             <h2 className="font-serif text-3xl md:text-4xl lg:text-5xl text-brand-crimson font-medium">
               Book Reviews
             </h2>
-            <div className="h-0.5 w-14 bg-brand-terracotta mt-3" />
+            <div className="h-0.5 w-14 bg-brand-terracotta mx-auto mt-3" />
           </div>
 
-          <Link
-            href="/reviews"
-            className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-brand-crimson/70 hover:text-brand-crimson transition-colors duration-200 group cursor-pointer pb-0.5 border-b border-brand-crimson/30 hover:border-brand-crimson"
-          >
-            <span>View All</span>
-            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          <div className="hidden sm:block absolute right-0 bottom-0.5">
+            <Link
+              href="/reviews"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold tracking-widest uppercase text-brand-crimson/70 hover:text-brand-crimson transition-colors duration-200 group cursor-pointer pb-0.5 border-b border-brand-crimson/30 hover:border-brand-crimson"
+            >
+              <span>View All</span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
 
         {!reviews || reviews.length === 0 ? (
