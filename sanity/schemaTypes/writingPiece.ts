@@ -60,6 +60,7 @@ export const writingPiece = defineType({
       title: 'Cover Image',
       type: 'image',
       options: { hotspot: true },
+      description: 'Meta image of url will be used by default if no image uploaded',
     }),
     defineField({
       name: 'publishedDate',

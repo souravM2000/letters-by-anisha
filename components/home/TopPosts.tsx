@@ -16,20 +16,24 @@ function PlatformBadge({ platform }: { platform: string }) {
   );
 }
 
+import { enrichPostsWithMetaImages } from "@/lib/ogImage";
+
 export async function TopPosts() {
   // Try featured first, fall back to most recent
-  let posts = await client.fetch<Post[] | null>(
+  let rawPosts = await client.fetch<Post[] | null>(
     featuredPostsQuery,
     {},
     { next: { tags: ["posts"] } }
   );
-  if (!posts || posts.length === 0) {
-    posts = await client.fetch<Post[] | null>(
+  if (!rawPosts || rawPosts.length === 0) {
+    rawPosts = await client.fetch<Post[] | null>(
       recentPostsQuery,
       {},
       { next: { tags: ["posts"] } }
     );
   }
+
+  const posts = await enrichPostsWithMetaImages(rawPosts ?? []);
 
   return (
     <Section id="posts" bgClass="bg-brand-cream">
@@ -47,39 +51,47 @@ export async function TopPosts() {
           </div>
         ) : (
           <Carousel itemCount={posts.length}>
-            {posts.map((post, index) => (
-              <CarouselItem key={post._id} className="w-[85vw] sm:w-[320px] lg:w-[360px] shrink-0 snap-center md:snap-start h-auto flex">
-              <a
-                key={post._id}
-                href={post.embedUrl ?? "#"}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex flex-col w-full h-full editorial-border bg-brand-vanilla overflow-hidden hover:shadow-lg transition-shadow duration-300 rounded-lg"
-              >
-                {/* Thumbnail (Compact) */}
-                <div className="relative aspect-[16/10] w-full overflow-hidden bg-brand-ink/5">
-                  {post.platform && (
-                    <PlatformBadge platform={post.platform} />
-                  )}
-                  {post.thumbnail ? (
-                    <Image
-                      src={urlFor(post.thumbnail).width(600).height(375).url()}
-                      alt={post.title ?? "Post thumbnail"}
-                      fill
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                      priority={index === 0}
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-brand-ink/5 flex items-center justify-center">
-                      <span className="font-serif text-brand-ink/20 text-sm italic">
-                        No thumbnail
-                      </span>
-                    </div>
-                  )}
-                  {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-brand-crimson/0 group-hover:bg-brand-crimson/10 transition-colors duration-300" />
-                </div>
+            {posts.map((post, index) => {
+              const imageUrl = post.thumbnail
+                ? urlFor(post.thumbnail).width(600).height(375).url()
+                : post.metaImage ?? null;
+
+              return (
+                <CarouselItem key={post._id} className="w-[85vw] sm:w-[320px] lg:w-[360px] shrink-0 snap-center md:snap-start h-auto flex">
+                <a
+                  key={post._id}
+                  href={post.embedUrl ?? "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex flex-col w-full h-full editorial-border bg-brand-vanilla overflow-hidden hover:shadow-lg transition-shadow duration-300 rounded-lg"
+                >
+                  {/* Thumbnail (Compact) */}
+                  <div className="relative aspect-[16/10] w-full overflow-hidden bg-brand-ink/5">
+                    {post.platform && (
+                      <PlatformBadge platform={post.platform} />
+                    )}
+                    {imageUrl ? (
+                      <Image
+                        src={imageUrl}
+                        alt={post.title ?? "Post thumbnail"}
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        priority={index === 0}
+                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        unoptimized={Boolean(post.metaImage && !post.thumbnail)}
+                        referrerPolicy="no-referrer"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-brand-ink/5 flex items-center justify-center">
+                        <span className="font-serif text-brand-ink/20 text-sm italic">
+                          No thumbnail
+                        </span>
+                      </div>
+                    )}
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-brand-crimson/0 group-hover:bg-brand-crimson/10 transition-colors duration-300" />
+                  </div>
+
 
                 {/* Card body */}
                 <div className="p-4 flex flex-col flex-1">
@@ -94,7 +106,8 @@ export async function TopPosts() {
                 </div>
               </a>
               </CarouselItem>
-            ))}
+            );
+          })}
           </Carousel>
         )}
       </Container>

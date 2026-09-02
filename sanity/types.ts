@@ -78,6 +78,7 @@ export interface BookReview {
   author: string;
   slug: SanitySlug;
   coverImage?: SanityImage | null;
+  metaImage?: string | null;
   rating: number;
   genre?: string[] | null;
   reviewExcerpt: string;
@@ -96,10 +97,12 @@ export interface Post {
   platform: string;
   embedUrl: string;
   thumbnail?: SanityImage | null;
+  metaImage?: string | null;
   caption?: string | null;
   publishedDate: string;
   featured?: boolean;
 }
+
 
 // ── Brand Collab ────────────────────────────────────────────────────────────
 
@@ -107,6 +110,7 @@ export interface BrandCollab {
   _id: string;
   brandName: string;
   brandLogo?: SanityImage | null;
+  metaImage?: string | null;
   collabType?: string | null;
   description?: PortableTextBlock[] | null;
   collabUrl?: string | null;
@@ -142,9 +146,11 @@ export interface ShelfPick {
   name: string;
   category: string;
   image?: SanityImage | null;
+  metaImage?: string | null;
   description?: string | null;
   buyLink?: string | null;
   relatedVideoUrl?: string | null;
   featured?: boolean;
 }
+
 

@@ -8,12 +8,17 @@ import { bookReviewsQuery } from "@/sanity/lib/queries";
 import type { BookReview } from "@/sanity/types";
 import { BookReviewCard } from "@/components/home/BookReviewCard";
 
+import { enrichBookReviewsWithMetaImages } from "@/lib/ogImage";
+
 export async function BookReviews() {
-  const reviews = await client.fetch<BookReview[] | null>(
+  const rawReviews = await client.fetch<BookReview[] | null>(
     bookReviewsQuery,
     {},
     { next: { tags: ["reviews"] } }
   );
+
+  const reviews = await enrichBookReviewsWithMetaImages(rawReviews ?? []);
+
 
   return (
     <Section id="reviews" bgClass="bg-brand-cream">

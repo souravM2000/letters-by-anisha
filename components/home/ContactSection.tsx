@@ -35,7 +35,7 @@ export async function ContactSection() {
                 or a publisher — I&apos;d love to hear from you.
               </p>
               <p className="text-brand-ink/60 text-sm leading-relaxed">
-                I typically respond within 2–3 business days.
+                I typically respond within 1–2 business days.
               </p>
             </div>
 
@@ -77,10 +77,9 @@ export async function ContactSection() {
             {/* Small editorial divider quote */}
             <blockquote className="border-l-2 border-brand-terracotta pl-4 mt-8">
               <p className="font-serif italic text-brand-ink/60 text-sm leading-relaxed">
-                &ldquo;A reader lives a thousand lives before she dies. The person who
-                never reads lives only one.&rdquo;
+                &ldquo;There is no surer foundation for a beautiful friendship than a mutual taste in literature.&rdquo;
               </p>
-              <footer className="text-xs text-brand-ink/40 mt-2">— George R.R. Martin</footer>
+              <footer className="text-xs text-brand-ink/40 mt-2">— P.G. Wodehouse</footer>
             </blockquote>
           </FadeUp>
 

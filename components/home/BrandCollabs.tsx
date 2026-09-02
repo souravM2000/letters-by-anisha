@@ -5,12 +5,17 @@ import { brandCollabsQuery } from "@/sanity/lib/queries";
 import type { BrandCollab } from "@/sanity/types";
 import { BrandCollabsClient } from "@/components/home/BrandCollabsClient";
 
+import { enrichBrandCollabsWithMetaImages } from "@/lib/ogImage";
+
 export async function BrandCollabs() {
-  const collabs = await client.fetch<BrandCollab[] | null>(
+  const rawCollabs = await client.fetch<BrandCollab[] | null>(
     brandCollabsQuery,
     {},
     { next: { tags: ["collabs"] } }
   );
+
+  const collabs = await enrichBrandCollabsWithMetaImages(rawCollabs ?? []);
+
 
   return (
     <Section id="collabs" bgClass="bg-brand-vanilla">

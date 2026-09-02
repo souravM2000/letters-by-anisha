@@ -6,6 +6,8 @@ import { shelfPicksQuery } from "@/sanity/lib/queries";
 import type { ShelfPick } from "@/sanity/types";
 import { ShelfClient } from "@/components/shelf/ShelfClient";
 
+import { enrichShelfPicksWithMetaImages } from "@/lib/ogImage";
+
 export const metadata: Metadata = {
   title: "Shop My Picks",
   description:
@@ -13,11 +15,14 @@ export const metadata: Metadata = {
 };
 
 export default async function ShelfPage() {
-  const picks = await client.fetch<ShelfPick[]>(
+  const rawPicks = await client.fetch<ShelfPick[]>(
     shelfPicksQuery,
     {},
     { next: { tags: ["shelf"] } }
   );
+
+  const picks = await enrichShelfPicksWithMetaImages(rawPicks ?? []);
+
 
   return (
     <>

@@ -6,6 +6,8 @@ import { bookReviewsQuery } from "@/sanity/lib/queries";
 import type { BookReview } from "@/sanity/types";
 import { BookReviewsClient } from "@/components/reviews/BookReviewsClient";
 
+import { enrichBookReviewsWithMetaImages } from "@/lib/ogImage";
+
 export const metadata: Metadata = {
   title: "Book Reviews",
   description:
@@ -13,11 +15,14 @@ export const metadata: Metadata = {
 };
 
 export default async function ReviewsPage() {
-  const reviews = await client.fetch<BookReview[]>(
+  const rawReviews = await client.fetch<BookReview[]>(
     bookReviewsQuery,
     {},
     { next: { tags: ["reviews"] } }
   );
+
+  const reviews = await enrichBookReviewsWithMetaImages(rawReviews ?? []);
+
 
   return (
     <>

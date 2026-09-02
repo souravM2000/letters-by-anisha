@@ -67,7 +67,7 @@ export async function Footer() {
 
         <div className="mt-16 pt-8 border-t border-brand-cream/10 flex flex-col md:flex-row justify-between items-center gap-4 text-brand-cream/50 text-sm">
           <p>© {currentYear} {settings?.name || "Letters by Anisha"}. All rights reserved.</p>
-          <p className="font-serif italic">Curated with intent.</p>
+          <p className="font-serif italic">A reader's retreat.</p>
         </div>
       </Container>
     </footer>

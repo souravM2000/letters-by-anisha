@@ -59,21 +59,29 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
           title="Click to view full review"
         >
           <div className="relative w-20 sm:w-24 aspect-[2/3] shadow-md rounded-sm overflow-hidden bg-brand-vanilla">
-            {review.coverImage ? (
-              <Image
-                src={urlFor(review.coverImage).width(300).height(450).url()}
-                alt={`Cover of ${review.bookTitle}`}
-                fill
-                sizes="100px"
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <span className="font-serif text-brand-ink/20 text-xs italic">
-                  No cover
-                </span>
-              </div>
-            )}
+            {(() => {
+              const coverUrl = review.coverImage
+                ? urlFor(review.coverImage).width(300).height(450).url()
+                : review.metaImage ?? null;
+
+              return coverUrl ? (
+                <Image
+                  src={coverUrl}
+                  alt={`Cover of ${review.bookTitle}`}
+                  fill
+                  sizes="100px"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  unoptimized={Boolean(review.metaImage && !review.coverImage)}
+                  referrerPolicy="no-referrer"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="font-serif text-brand-ink/20 text-xs italic">
+                    No cover
+                  </span>
+                </div>
+              );
+            })()}
           </div>
         </div>
 
@@ -215,21 +223,29 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
                   <div className="flex flex-col gap-5 items-center text-center">
                     {/* Book Cover */}
                     <div className="relative w-32 sm:w-40 aspect-[2/3] shrink-0 shadow-lg rounded-md overflow-hidden bg-brand-vanilla border border-brand-ink/10 mx-auto">
-                      {review.coverImage ? (
-                        <Image
-                          src={urlFor(review.coverImage).width(400).height(600).url()}
-                          alt={`Cover of ${review.bookTitle}`}
-                          fill
-                          sizes="160px"
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span className="font-serif text-brand-ink/20 text-xs italic">
-                            No cover
-                          </span>
-                        </div>
-                      )}
+                      {(() => {
+                        const modalCoverUrl = review.coverImage
+                          ? urlFor(review.coverImage).width(400).height(600).url()
+                          : review.metaImage ?? null;
+
+                        return modalCoverUrl ? (
+                          <Image
+                            src={modalCoverUrl}
+                            alt={`Cover of ${review.bookTitle}`}
+                            fill
+                            sizes="160px"
+                            className="object-cover"
+                            unoptimized={Boolean(review.metaImage && !review.coverImage)}
+                            referrerPolicy="no-referrer"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <span className="font-serif text-brand-ink/20 text-xs italic">
+                              No cover
+                            </span>
+                          </div>
+                        );
+                      })()}
                     </div>
 
                     {/* Meta details */}

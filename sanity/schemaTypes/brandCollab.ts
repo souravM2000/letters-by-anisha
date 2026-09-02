@@ -33,7 +33,7 @@ export const brandCollab = defineType({
       title: 'Brand Logo',
       type: 'image',
       options: { hotspot: true },
-      validation: (Rule) => Rule.required(),
+      description: 'Meta image of url will be used by default if no image uploaded',
     }),
     defineField({
       name: 'description',

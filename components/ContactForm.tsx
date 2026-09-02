@@ -201,7 +201,7 @@ export function ContactForm() {
           rows={5}
           value={formData.message}
           onChange={handleChange}
-          placeholder="Tell me about your project, collaboration idea, or question…"
+          placeholder="Drop me a line - every great story begins with a simple hello..."
           className={`${inputBase} resize-none ${fieldError("message")}`}
           disabled={state === "submitting"}
         />

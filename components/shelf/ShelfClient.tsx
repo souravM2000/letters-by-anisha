@@ -112,19 +112,27 @@ function ShelfCard({ pick }: { pick: ShelfPick }) {
 
       {/* Image area */}
       <div className="relative aspect-square w-full bg-brand-vanilla overflow-hidden">
-        {pick.image ? (
-          <Image
-            src={urlFor(pick.image).width(600).height(600).url()}
-            alt={pick.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <Package className="w-14 h-14 text-brand-ink/15" />
-          </div>
-        )}
+        {(() => {
+          const imageUrl = pick.image
+            ? urlFor(pick.image).width(600).height(600).url()
+            : pick.metaImage ?? null;
+
+          return imageUrl ? (
+            <Image
+              src={imageUrl}
+              alt={pick.name}
+              fill
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              unoptimized={Boolean(pick.metaImage && !pick.image)}
+              referrerPolicy="no-referrer"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <Package className="w-14 h-14 text-brand-ink/15" />
+            </div>
+          );
+        })()}
       </div>
 
       {/* Body */}

@@ -80,21 +80,29 @@ export function BrandCollabsClient({ collabs }: BrandCollabsClientProps) {
           >
             {/* Round Logo Container */}
             <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full border-2 border-brand-ink/10 bg-white p-3 shadow-xs group-hover:shadow-lg transition-all duration-300 group-hover:scale-110 group-hover:border-brand-crimson/50 group-focus-visible:ring-2 group-focus-visible:ring-brand-crimson flex items-center justify-center overflow-hidden">
-              {collab.brandLogo ? (
-                <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
-                  <Image
-                    src={urlFor(collab.brandLogo).width(200).height(200).url()}
-                    alt={`${collab.brandName} logo`}
-                    fill
-                    sizes="(max-width: 640px) 80px, (max-width: 768px) 96px, 112px"
-                    className="object-contain p-1 rounded-full transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-              ) : (
-                <span className="font-serif text-lg sm:text-xl font-medium text-brand-crimson">
-                  {collab.brandName.slice(0, 2).toUpperCase()}
-                </span>
-              )}
+              {(() => {
+                const logoUrl = collab.brandLogo
+                  ? urlFor(collab.brandLogo).width(200).height(200).url()
+                  : collab.metaImage ?? null;
+
+                return logoUrl ? (
+                  <div className="relative w-full h-full rounded-full overflow-hidden flex items-center justify-center">
+                    <Image
+                      src={logoUrl}
+                      alt={`${collab.brandName} logo`}
+                      fill
+                      sizes="(max-width: 640px) 80px, (max-width: 768px) 96px, 112px"
+                      className="object-contain p-1 rounded-full transition-transform duration-300 group-hover:scale-105"
+                      unoptimized={Boolean(collab.metaImage && !collab.brandLogo)}
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                ) : (
+                  <span className="font-serif text-lg sm:text-xl font-medium text-brand-crimson">
+                    {collab.brandName.slice(0, 2).toUpperCase()}
+                  </span>
+                );
+              })()}
             </div>
 
             {/* Brand Name Label */}
@@ -161,19 +169,27 @@ export function BrandCollabsClient({ collabs }: BrandCollabsClientProps) {
                     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5 text-center sm:text-left">
                       {/* Round Logo */}
                       <div className="relative w-20 h-20 sm:w-24 sm:h-24 shrink-0 rounded-full border-2 border-brand-crimson/20 bg-white p-2.5 shadow-md overflow-hidden flex items-center justify-center">
-                        {selectedCollab.brandLogo ? (
-                          <Image
-                            src={urlFor(selectedCollab.brandLogo).width(200).height(200).url()}
-                            alt={`${selectedCollab.brandName} logo`}
-                            fill
-                            sizes="96px"
-                            className="object-contain p-1 rounded-full"
-                          />
-                        ) : (
-                          <span className="font-serif text-2xl font-semibold text-brand-crimson">
-                            {selectedCollab.brandName.slice(0, 2).toUpperCase()}
-                          </span>
-                        )}
+                        {(() => {
+                          const selectedLogoUrl = selectedCollab.brandLogo
+                            ? urlFor(selectedCollab.brandLogo).width(200).height(200).url()
+                            : selectedCollab.metaImage ?? null;
+
+                          return selectedLogoUrl ? (
+                            <Image
+                              src={selectedLogoUrl}
+                              alt={`${selectedCollab.brandName} logo`}
+                              fill
+                              sizes="96px"
+                              className="object-contain p-1 rounded-full"
+                              unoptimized={Boolean(selectedCollab.metaImage && !selectedCollab.brandLogo)}
+                              referrerPolicy="no-referrer"
+                            />
+                          ) : (
+                            <span className="font-serif text-2xl font-semibold text-brand-crimson">
+                              {selectedCollab.brandName.slice(0, 2).toUpperCase()}
+                            </span>
+                          );
+                        })()}
                       </div>
 
                       {/* Brand Info */}
