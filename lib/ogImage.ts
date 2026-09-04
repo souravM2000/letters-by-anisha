@@ -98,7 +98,7 @@ async function fetchHtmlWithUa(url: string, userAgent: string): Promise<string |
   }
 }
 
-function extractImageFromHtml(html: string | null, baseUrl: string): string | null {
+export function extractImageFromHtml(html: string | null, baseUrl: string): string | null {
   if (!html || typeof html !== "string") return null;
 
   // 1. Scan <meta> tags in the HTML
@@ -192,7 +192,7 @@ function extractImageFromHtml(html: string | null, baseUrl: string): string | nu
   return null;
 }
 
-function cleanAndResolveUrl(rawUrl: string, baseUrl: string): string | null {
+export function cleanAndResolveUrl(rawUrl: string, baseUrl: string): string | null {
   if (!rawUrl || typeof rawUrl !== "string") return null;
 
   try {
