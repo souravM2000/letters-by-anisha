@@ -180,6 +180,8 @@ async function fetchOgImageUrl(url: string): Promise<string | null> {
 
 /**
  * Downloads the raw image bytes from `imageUrl`.
+ * Tries a standard desktop browser User-Agent first (avoids 403s on WordPress/e-commerce CDNs),
+ * falling back to a social crawler UA if needed.
  * Uses a 30-second AbortController timeout.
  * Returns { buffer, contentType } or null on failure.
  */
@@ -189,28 +191,42 @@ async function downloadImageBuffer(
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 30_000)
 
-  try {
-    const res = await fetch(imageUrl, {
-      signal: controller.signal,
-      headers: {
-        'User-Agent':
-          'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
-        Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
-      },
-      cache: 'no-store',
-    })
+  const userAgents = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+    'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+  ]
 
-    if (!res.ok) {
-      console.error(
-        `[sanity-cache-image] Image download failed: ${res.status} for ${imageUrl}`
-      )
-      return null
+  try {
+    for (const userAgent of userAgents) {
+      try {
+        const res = await fetch(imageUrl, {
+          signal: controller.signal,
+          headers: {
+            'User-Agent': userAgent,
+            Accept: 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+          },
+          cache: 'no-store',
+        })
+
+        if (res.ok) {
+          const contentType =
+            res.headers.get('content-type')?.split(';')[0]?.trim() ?? 'image/jpeg'
+          const arrayBuffer = await res.arrayBuffer()
+          return { buffer: Buffer.from(arrayBuffer), contentType }
+        }
+
+        console.warn(
+          `[sanity-cache-image] Image download returned ${res.status} with UA "${userAgent.slice(0, 30)}..." for ${imageUrl}`
+        )
+      } catch (innerErr) {
+        if ((innerErr as Error).name === 'AbortError') throw innerErr
+      }
     }
 
-    const contentType =
-      res.headers.get('content-type')?.split(';')[0]?.trim() ?? 'image/jpeg'
-    const arrayBuffer = await res.arrayBuffer()
-    return { buffer: Buffer.from(arrayBuffer), contentType }
+    console.error(
+      `[sanity-cache-image] Image download failed after trying all UAs for ${imageUrl}`
+    )
+    return null
   } catch (err) {
     if ((err as Error).name === 'AbortError') {
       console.error(
