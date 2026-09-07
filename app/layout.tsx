@@ -10,6 +10,7 @@ import {
   EB_Garamond,
 } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
@@ -132,6 +133,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col font-sans bg-brand-cream text-brand-ink selection:bg-brand-terracotta selection:text-white">
         {children}
         <Analytics />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID!} />
       </body>
     </html>
   );

@@ -1,6 +1,6 @@
 {
   "name": "letters-by-anisha",
-  "version": "1.0.1",
+  "version": "1.2.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -10,6 +10,7 @@
     "typegen": "sanity typegen generate"
   },
   "dependencies": {
+    "@next/third-parties": "^16.3.4",
     "@sanity/image-url": "^2.1.1",
     "@sanity/vision": "^5.31.2",
     "@vercel/analytics": "^2.0.1",
