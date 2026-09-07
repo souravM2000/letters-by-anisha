@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -10,6 +10,12 @@ import { StarRating } from "@/components/ui/StarRating";
 import { SocialIcon } from "@/components/ui/SocialIcon";
 import { urlFor } from "@/sanity/lib/image";
 import type { BookReview } from "@/sanity/types";
+import {
+  trackAffiliateLinkClick,
+  trackSocialLinkClick,
+  trackPostRead,
+  trackScrollDepth,
+} from "@/lib/analytics";
 
 interface BookReviewCardProps {
   review: BookReview;
@@ -18,6 +24,8 @@ interface BookReviewCardProps {
 export function BookReviewCard({ review }: BookReviewCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const scrollSentinelRef = useRef<HTMLDivElement>(null);
+  const scrollTrackedRef = useRef(false);
   const hasFullReview = Boolean(review.fullReview && review.fullReview.length > 0);
 
   useEffect(() => {
@@ -45,8 +53,31 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
     };
   }, [isOpen]);
 
+  // Scroll-depth: fire once when the sentinel (mid-point) enters the viewport
+  useEffect(() => {
+    if (!isOpen || !scrollSentinelRef.current) return;
+    scrollTrackedRef.current = false; // reset on each open
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !scrollTrackedRef.current) {
+          scrollTrackedRef.current = true;
+          trackScrollDepth({ post_title: review.bookTitle ?? "unknown", depth: "50" });
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    observer.observe(scrollSentinelRef.current);
+    return () => observer.disconnect();
+  }, [isOpen, review.bookTitle]);
+
   const openModal = () => {
     setIsOpen(true);
+    trackPostRead({
+      post_title: review.bookTitle ?? "unknown",
+      post_category: Array.isArray(review.genre) ? review.genre.join(", ") : undefined,
+    });
   };
 
   return (
@@ -144,7 +175,15 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
                   href={review.affiliateLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    trackAffiliateLinkClick({
+                      item_name: review.bookTitle ?? "unknown",
+                      item_category: Array.isArray(review.genre) ? review.genre.join(", ") : "book",
+                      destination_url: review.affiliateLink!,
+                      source: "book_review_card",
+                    });
+                  }}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-brand-crimson text-brand-cream hover:bg-brand-terracotta transition-colors text-xs font-medium"
                   title="Buy Link"
                 >
@@ -158,7 +197,14 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
                   href={review.associatedReelUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    trackSocialLinkClick({
+                      platform: "instagram",
+                      link_location: "book_review_card",
+                      destination_url: review.associatedReelUrl!,
+                    });
+                  }}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-colors text-xs font-medium"
                   title="Watch on Instagram"
                 >
@@ -219,6 +265,8 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
 
                   {/* Modal Body (Scrollable) */}
                   <div className="p-6 sm:p-8 overflow-y-auto space-y-6">
+                  {/* Scroll-depth sentinel: placed at the vertical midpoint */}
+                  <div ref={scrollSentinelRef} aria-hidden="true" />
                   {/* Book Header info */}
                   <div className="flex flex-col gap-5 items-center text-center">
                     {/* Book Cover */}
@@ -313,6 +361,14 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
                           href={review.affiliateLink}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={() =>
+                            trackAffiliateLinkClick({
+                              item_name: review.bookTitle ?? "unknown",
+                              item_category: Array.isArray(review.genre) ? review.genre.join(", ") : "book",
+                              destination_url: review.affiliateLink!,
+                              source: "book_review_modal",
+                            })
+                          }
                           className="flex items-center gap-2 px-5 py-2 rounded-full bg-brand-crimson text-brand-cream hover:bg-brand-terracotta transition-colors text-sm font-medium shadow-xs"
                         >
                           <ShoppingCart className="w-4 h-4" />
@@ -326,6 +382,13 @@ export function BookReviewCard({ review }: BookReviewCardProps) {
                           href={review.associatedReelUrl}
                           target="_blank"
                           rel="noopener noreferrer"
+                          onClick={() =>
+                            trackSocialLinkClick({
+                              platform: "instagram",
+                              link_location: "book_review_modal",
+                              destination_url: review.associatedReelUrl!,
+                            })
+                          }
                           className="flex items-center gap-2 px-5 py-2 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-colors text-sm font-medium"
                         >
                           <SocialIcon platform="instagram" className="w-4 h-4" />

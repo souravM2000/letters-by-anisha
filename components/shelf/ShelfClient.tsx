@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart, ExternalLink, Sparkles, Package } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
 import type { ShelfPick } from "@/sanity/types";
+import { trackAffiliateLinkClick, trackSocialLinkClick } from "@/lib/analytics";
 
 const ALL = "All";
 
@@ -162,6 +163,14 @@ function ShelfCard({ pick }: { pick: ShelfPick }) {
                 href={pick.buyLink}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackAffiliateLinkClick({
+                    item_name: pick.name,
+                    item_category: pick.category ?? "uncategorized",
+                    destination_url: pick.buyLink!,
+                    source: "shelf",
+                  })
+                }
                 className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-brand-crimson text-brand-cream text-xs font-semibold hover:bg-brand-terracotta transition-colors shadow-xs"
               >
                 <ShoppingCart className="w-3.5 h-3.5" />
@@ -174,6 +183,13 @@ function ShelfCard({ pick }: { pick: ShelfPick }) {
                 href={pick.relatedVideoUrl}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() =>
+                  trackSocialLinkClick({
+                    platform: "instagram",
+                    link_location: "shelf_card",
+                    destination_url: pick.relatedVideoUrl!,
+                  })
+                }
                 className="flex items-center justify-center gap-2 px-4 py-2 rounded-full border border-brand-crimson/40 text-brand-crimson text-xs font-medium hover:bg-brand-crimson/5 transition-colors"
               >
                 <VideoIcon />

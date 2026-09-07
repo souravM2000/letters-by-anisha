@@ -6,7 +6,8 @@ import { aboutQuery, siteSettingsQuery } from "@/sanity/lib/queries";
 import { PortableText } from "@portabletext/react";
 import { FileDown, Sparkles } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
-import { SocialIcon, formatSocialUrl } from "@/components/ui/SocialIcon";
+import { formatSocialUrl } from "@/components/ui/SocialIcon";
+import { TrackedSocialLinks } from "@/components/ui/TrackedSocialLinks";
 import type { About, SiteSettings, SocialLink } from "@/sanity/types";
 
 export async function AboutSection() {
@@ -95,23 +96,12 @@ export async function AboutSection() {
               
               <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-5 sm:gap-6 w-full lg:w-auto">
                 <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-                  {socialHandles.map((social: SocialLink, i: number) => {
-                    const href = formatSocialUrl(social.url, social.platform);
-                    const isEmail = social.platform?.toLowerCase().includes("email");
-                    
-                    return (
-                      <a
-                        key={i}
-                        href={href}
-                        target={isEmail ? undefined : "_blank"}
-                        rel={isEmail ? undefined : "noopener noreferrer"}
-                        className="w-10 h-10 rounded-full bg-brand-terracotta text-brand-cream hover:bg-brand-crimson transition-colors flex items-center justify-center"
-                        title={social.platform}
-                      >
-                        <SocialIcon platform={social.platform} className="w-5 h-5" />
-                      </a>
-                    );
-                  })}
+                  <TrackedSocialLinks
+                    socialHandles={socialHandles}
+                    location="about_section"
+                    className="w-10 h-10 rounded-full bg-brand-terracotta text-brand-cream hover:bg-brand-crimson transition-colors flex items-center justify-center"
+                    iconClassName="w-5 h-5"
+                  />
                 </div>
 
                 <div className="flex flex-col gap-2.5 w-full sm:w-auto items-stretch sm:items-center lg:items-start max-w-xs sm:max-w-none">

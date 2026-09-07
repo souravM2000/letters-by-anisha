@@ -7,6 +7,7 @@ import { featuredPostsQuery, recentPostsQuery } from "@/sanity/lib/queries";
 import { urlFor } from "@/sanity/lib/image";
 import type { Post } from "@/sanity/types";
 import { Carousel, CarouselItem } from "@/components/ui/Carousel";
+import { TrackedPostLink } from "@/components/ui/TrackedPostLink";
 
 function PlatformBadge({ platform }: { platform: string }) {
   return (
@@ -58,11 +59,11 @@ export async function TopPosts() {
 
               return (
                 <CarouselItem key={post._id} className="w-[85vw] sm:w-[320px] lg:w-[360px] shrink-0 snap-center md:snap-start h-auto flex">
-                <a
+                <TrackedPostLink
                   key={post._id}
                   href={post.embedUrl ?? "#"}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  platform={post.platform}
+                  postTitle={post.title}
                   className="group flex flex-col w-full h-full editorial-border bg-brand-vanilla overflow-hidden hover:shadow-lg transition-shadow duration-300 rounded-lg"
                 >
                   {/* Thumbnail (Compact) */}
@@ -104,7 +105,7 @@ export async function TopPosts() {
                     </p>
                   )}
                 </div>
-              </a>
+              </TrackedPostLink>
               </CarouselItem>
             );
           })}

@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Container } from "../ui/Container";
 import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
-import { SocialIcon, formatSocialUrl } from "../ui/SocialIcon";
+import { TrackedSocialLinks } from "../ui/TrackedSocialLinks";
 import type { SiteSettings, SocialLink } from "@/sanity/types";
 
 export async function Footer() {
@@ -29,26 +29,10 @@ export async function Footer() {
 
           <div className="flex flex-col items-center md:items-end gap-6">
             <div className="flex items-center space-x-4">
-              {settings?.socialHandles
-                ?.filter((social: SocialLink) => Boolean(social.url || social.handle))
-                .map((social: SocialLink, i: number) => {
-                  const href = formatSocialUrl(social.url, social.platform);
-                  const isEmail = social.platform?.toLowerCase().includes("email");
-
-                  return (
-                    <a
-                      key={i}
-                      href={href}
-                      target={isEmail ? undefined : "_blank"}
-                      rel={isEmail ? undefined : "noopener noreferrer"}
-                      className="text-brand-cream/70 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-full"
-                      aria-label={social.platform}
-                      title={social.platform}
-                    >
-                      <SocialIcon platform={social.platform} className="w-5 h-5" />
-                    </a>
-                  );
-                })}
+              <TrackedSocialLinks
+                socialHandles={settings?.socialHandles?.filter((s: SocialLink) => Boolean(s.url || s.handle)) ?? []}
+                location="footer"
+              />
             </div>
             
             <nav className="flex flex-wrap justify-center md:justify-end gap-x-6 gap-y-2">

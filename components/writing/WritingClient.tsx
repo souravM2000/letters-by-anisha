@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight, Feather, Calendar } from "lucide-react";
 import { urlFor } from "@/sanity/lib/image";
 import type { WritingPiece } from "@/sanity/types";
+import { trackPostRead } from "@/lib/analytics";
 
 const ALL = "All";
 
@@ -103,6 +104,13 @@ export function WritingClient({ pieces }: WritingClientProps) {
                   href={piece.externalUrl ?? "#"}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() =>
+                    trackPostRead({
+                      post_title: piece.title ?? "unknown",
+                      post_category: piece.category ?? undefined,
+                      destination_url: piece.externalUrl ?? undefined,
+                    })
+                  }
                   className="group w-full flex flex-col items-start gap-4 p-5 sm:p-6 bg-brand-vanilla editorial-border hover:shadow-lg transition-all duration-300 rounded-xl h-full relative overflow-hidden"
                 >
                   {/* Cover image or meta Open Graph image */}
