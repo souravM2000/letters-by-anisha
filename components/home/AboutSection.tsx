@@ -88,13 +88,13 @@ export async function AboutSection() {
             )}
 
             {/* Let's Connect Section */}
-            <div>
+            <div className="flex flex-col items-center text-center lg:items-start lg:text-left">
               <h3 className="font-serif text-2xl sm:text-3xl text-brand-crimson mb-3 sm:mb-4">
                 Let&apos;s Connect
               </h3>
               
-              <div className="flex flex-wrap items-center gap-6">
-                <div className="flex flex-wrap gap-3">
+              <div className="flex flex-col sm:flex-row flex-wrap items-center justify-center lg:justify-start gap-5 sm:gap-6 w-full lg:w-auto">
+                <div className="flex flex-wrap justify-center lg:justify-start gap-3">
                   {socialHandles.map((social: SocialLink, i: number) => {
                     const href = formatSocialUrl(social.url, social.platform);
                     const isEmail = social.platform?.toLowerCase().includes("email");
@@ -114,13 +114,13 @@ export async function AboutSection() {
                   })}
                 </div>
 
-                <div className="flex flex-col gap-2.5">
+                <div className="flex flex-col gap-2.5 w-full sm:w-auto items-stretch sm:items-center lg:items-start max-w-xs sm:max-w-none">
                   {settingsData?.resumeUrl && (
                     <a
                       href={settingsData.resumeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 px-6 py-2 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-all text-sm font-medium"
+                      className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2 rounded-full border border-brand-crimson text-brand-crimson hover:bg-brand-crimson hover:text-brand-cream transition-all text-sm font-medium text-center"
                     >
                       <span>Download Portfolio (PDF)</span>
                       <FileDown className="w-4 h-4" />
@@ -130,7 +130,7 @@ export async function AboutSection() {
                     href="https://anisha-ghosh-portfolio.my.canva.site"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center gap-2 px-6 py-2 rounded-full bg-brand-crimson text-brand-cream hover:bg-brand-terracotta transition-all text-sm font-medium"
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2 rounded-full bg-brand-crimson text-brand-cream hover:bg-brand-terracotta transition-all text-sm font-medium text-center"
                   >
                     <Sparkles className="w-4 h-4" />
                     <span>Creative Portfolio (Canva)</span>
