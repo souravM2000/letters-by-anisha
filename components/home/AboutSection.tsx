@@ -20,10 +20,10 @@ export async function AboutSection() {
   return (
     <Section id="about" bgClass="bg-brand-cream" className="pt-28 md:pt-32 pb-8 md:pb-12">
       <Container>
-        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-12 lg:gap-20 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-[5fr_7fr] gap-8 lg:gap-14 items-start">
           
           {/* Left Column: Framed Image */}
-          <div className="relative w-full max-w-md mx-auto lg:mx-0">
+          <div className="relative w-full max-w-[260px] sm:max-w-xs md:max-w-sm lg:max-w-[360px] mx-auto lg:mx-0">
             {settingsData?.profileImage ? (
               <div className="relative aspect-[4/5] w-full border border-brand-terracotta p-2 bg-brand-cream">
                 <div className="relative w-full h-full">
@@ -45,11 +45,11 @@ export async function AboutSection() {
           </div>
 
           {/* Right Column: About Text & Connect */}
-          <div className="flex flex-col pt-4 lg:pt-8">
-            <span className="font-handwritten text-3xl md:text-4xl text-brand-terracotta mb-2 block">
+          <div className="flex flex-col pt-0 lg:-mt-7">
+            <span className="font-handwritten text-2xl sm:text-3xl md:text-4xl text-brand-terracotta mb-1 md:mb-2 block">
               Meet the Creator
             </span>
-            <h2 className="font-serif text-5xl md:text-7xl lg:text-8xl tracking-tight text-brand-crimson font-medium mb-8">
+            <h2 className="font-serif text-5xl md:text-6xl lg:text-7xl tracking-tight text-brand-crimson font-medium mb-4 md:mb-5">
               About
             </h2>
 
@@ -79,7 +79,7 @@ export async function AboutSection() {
                   const introFontClass = fontClassMap[aboutData.introFont ?? 'sans'] ?? 'font-sans';
                   const introSizeClass = sizeClassMap[aboutData.introFontSize ?? 'base'] ?? 'text-base';
                   return (
-                    <div className={`prose prose-brand text-brand-ink/90 leading-relaxed mb-12 ${introFontClass} ${introSizeClass}`}>
+                    <div className={`prose prose-brand text-brand-ink/90 leading-relaxed mb-4 md:mb-5 ${introFontClass} ${introSizeClass}`}>
                       <PortableText value={aboutData.intro} />
                     </div>
                   );
@@ -89,7 +89,7 @@ export async function AboutSection() {
 
             {/* Let's Connect Section */}
             <div>
-              <h3 className="font-serif text-3xl text-brand-crimson mb-6">
+              <h3 className="font-serif text-2xl sm:text-3xl text-brand-crimson mb-3 sm:mb-4">
                 Let&apos;s Connect
               </h3>
               

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
@@ -36,11 +36,11 @@ interface BrandCollabsClientProps {
 
 export function BrandCollabsClient({ collabs }: BrandCollabsClientProps) {
   const [selectedCollab, setSelectedCollab] = useState<BrandCollab | null>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   // Close modal on Escape key and lock body scroll
   useEffect(() => {

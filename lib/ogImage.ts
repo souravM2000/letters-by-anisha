@@ -171,7 +171,7 @@ export function extractImageFromHtml(html: string | null, baseUrl: string): stri
         const img =
           parsed.image ||
           parsed.thumbnailUrl ||
-          parsed["@graph"]?.find?.((item: any) => item.image)?.image;
+          parsed["@graph"]?.find?.((item: Record<string, unknown>) => item.image)?.image;
 
         if (typeof img === "string") {
           const resolved = cleanAndResolveUrl(img, baseUrl);
@@ -225,7 +225,7 @@ export function cleanAndResolveUrl(rawUrl: string, baseUrl: string): string | nu
 // ─── Section Enrichment Helpers ─────────────────────────────────────────────
 
 export async function enrichWritingPiecesWithMetaImages<
-  T extends { coverImage?: any; externalUrl?: string | null; metaImage?: string | null }
+  T extends { coverImage?: unknown; externalUrl?: string | null; metaImage?: string | null }
 >(pieces: T[]): Promise<(T & { metaImage?: string | null })[]> {
   if (!Array.isArray(pieces) || pieces.length === 0) return [];
 
@@ -251,7 +251,7 @@ export async function enrichWritingPiecesWithMetaImages<
 }
 
 export async function enrichPostsWithMetaImages<
-  T extends { thumbnail?: any; embedUrl?: string | null; metaImage?: string | null }
+  T extends { thumbnail?: unknown; embedUrl?: string | null; metaImage?: string | null }
 >(posts: T[]): Promise<(T & { metaImage?: string | null })[]> {
   if (!Array.isArray(posts) || posts.length === 0) return [];
 
@@ -277,7 +277,7 @@ export async function enrichPostsWithMetaImages<
 }
 
 export async function enrichBrandCollabsWithMetaImages<
-  T extends { brandLogo?: any; brandUrl?: string | null; metaImage?: string | null }
+  T extends { brandLogo?: unknown; brandUrl?: string | null; metaImage?: string | null }
 >(collabs: T[]): Promise<(T & { metaImage?: string | null })[]> {
   if (!Array.isArray(collabs) || collabs.length === 0) return [];
 
@@ -303,7 +303,7 @@ export async function enrichBrandCollabsWithMetaImages<
 }
 
 export async function enrichBookReviewsWithMetaImages<
-  T extends { coverImage?: any; affiliateLink?: string | null; metaImage?: string | null }
+  T extends { coverImage?: unknown; affiliateLink?: string | null; metaImage?: string | null }
 >(reviews: T[]): Promise<(T & { metaImage?: string | null })[]> {
   if (!Array.isArray(reviews) || reviews.length === 0) return [];
 
@@ -329,7 +329,7 @@ export async function enrichBookReviewsWithMetaImages<
 }
 
 export async function enrichShelfPicksWithMetaImages<
-  T extends { image?: any; buyLink?: string | null; metaImage?: string | null }
+  T extends { image?: unknown; buyLink?: string | null; metaImage?: string | null }
 >(picks: T[]): Promise<(T & { metaImage?: string | null })[]> {
   if (!Array.isArray(picks) || picks.length === 0) return [];
 
