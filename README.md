@@ -114,4 +114,4 @@ To automatically invalidate Next.js cache when content updates in Sanity:
 1. In Sanity Project Settings, add a Webhook pointing to:  
    `https://<your-domain>/api/revalidate`
 2. Set the secret to match `SANITY_REVALIDATE_SECRET`.
-3. The route verifies webhook signatures using `@sanity/webhook` and tags: `settings`, `posts`, `reviews`, `collabs`, `writing`, and `about`.
+3. The route verifies webhook signatures using `@sanity/webhook` and tags: `settings`, `posts`, `reviews`, `collabs`, `writing`, `shelf`, and `about`.

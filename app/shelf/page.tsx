@@ -14,6 +14,9 @@ export const metadata: Metadata = {
     "Anisha's curated shelf — books, stationery, reading accessories, and studio essentials she loves and recommends.",
 };
 
+// Periodic revalidation fallback (60 seconds) in case webhook fails or is delayed
+export const revalidate = 60;
+
 export default async function ShelfPage() {
   const rawPicks = await client.fetch<ShelfPick[]>(
     shelfPicksQuery,

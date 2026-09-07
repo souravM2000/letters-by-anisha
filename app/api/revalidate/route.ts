@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { isValidSignature, SIGNATURE_HEADER_NAME } from "@sanity/webhook";
 
 // Map Sanity document _type → Next.js cache tag
@@ -10,6 +10,18 @@ const TYPE_TO_TAG: Record<string, string> = {
   brandCollab: "collabs",
   writingPiece: "writing",
   about: "about",
+  shelfPick: "shelf",
+};
+
+// Map Sanity document _type → Next.js page path to ensure page route cache is purged
+const TYPE_TO_PATH: Record<string, string> = {
+  siteSettings: "/",
+  post: "/",
+  bookReview: "/reviews",
+  brandCollab: "/",
+  writingPiece: "/writing",
+  about: "/",
+  shelfPick: "/shelf",
 };
 
 export async function POST(req: NextRequest) {
@@ -44,11 +56,20 @@ export async function POST(req: NextRequest) {
   }
 
   const tag = TYPE_TO_TAG[docType];
+  const path = TYPE_TO_PATH[docType];
 
   if (tag) {
     revalidateTag(tag, { expire: 0 });
-    console.log(`[revalidate] Revalidated tag: "${tag}" for type: "${docType}"`);
-    return NextResponse.json({ revalidated: true, tag }, { status: 200 });
+    if (path) {
+      revalidatePath(path);
+    }
+    console.log(
+      `[revalidate] Revalidated tag: "${tag}" and path: "${path}" for type: "${docType}"`
+    );
+    return NextResponse.json(
+      { revalidated: true, tag, path },
+      { status: 200 }
+    );
   }
 
   // Unknown type — still 200, just no action
