@@ -45,35 +45,35 @@ const TYPE_CONFIGS: Record<string, TypeConfig> = {
     label: 'Post',
     imageField: 'thumbnail',
     filePrefix: 'thumbnail-post',
-    getUrl: (p) => p.embedUrl,
+    getUrl: (p) => p.embedUrl?.trim(),
     hasImage: (p) => Boolean(p.thumbnail?.asset?._ref),
   },
   writingPiece: {
     label: 'Writing Piece',
     imageField: 'coverImage',
     filePrefix: 'cover-writing',
-    getUrl: (p) => p.externalUrl,
+    getUrl: (p) => p.externalUrl?.trim(),
     hasImage: (p) => Boolean(p.coverImage?.asset?._ref),
   },
   brandCollab: {
     label: 'Brand Collaboration',
     imageField: 'brandLogo',
     filePrefix: 'logo-brand',
-    getUrl: (p) => p.brandUrl || p.collabUrl || p.projectUrl,
+    getUrl: (p) => (p.brandUrl || p.collabUrl || p.projectUrl)?.trim(),
     hasImage: (p) => Boolean(p.brandLogo?.asset?._ref),
   },
   shelfPick: {
     label: 'Shop My Pick',
     imageField: 'image',
     filePrefix: 'image-shelf',
-    getUrl: (p) => p.buyLink || p.relatedVideoUrl,
+    getUrl: (p) => (p.buyLink || p.relatedVideoUrl)?.trim(),
     hasImage: (p) => Boolean(p.image?.asset?._ref),
   },
   bookReview: {
     label: 'Book Review',
     imageField: 'coverImage',
     filePrefix: 'cover-review',
-    getUrl: (p) => p.affiliateLink || p.associatedReelUrl,
+    getUrl: (p) => (p.affiliateLink || p.associatedReelUrl)?.trim(),
     hasImage: (p) => Boolean(p.coverImage?.asset?._ref),
   },
 }
@@ -145,22 +145,28 @@ async function fetchOgImageUrl(url: string): Promise<string | null> {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 30_000)
 
-  try {
-    // Try 1: facebookexternalhit (standard social crawler)
-    let imageUrl = await crawlUrlWithUa(
-      trimmed,
-      'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
-      controller.signal
-    )
-    if (imageUrl) return imageUrl
+  const isFlipkart = trimmed.includes('flipkart.com')
+  const userAgents = isFlipkart
+    ? [
+        'Facebot',
+        'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+        'Twitterbot/1.0',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      ]
+    : [
+        'facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)',
+        'Twitterbot/1.0',
+        'Facebot',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      ]
 
-    // Try 2: Desktop browser UA fallback (brand stores, Amazon, Shopify, etc.)
-    imageUrl = await crawlUrlWithUa(
-      trimmed,
-      'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-      controller.signal
-    )
-    if (imageUrl) return imageUrl
+  try {
+    for (const ua of userAgents) {
+      const imageUrl = await crawlUrlWithUa(trimmed, ua, controller.signal)
+      if (imageUrl && !imageUrl.includes('previewdoh/amazon.png')) {
+        return imageUrl
+      }
+    }
 
     return null
   } catch (err) {

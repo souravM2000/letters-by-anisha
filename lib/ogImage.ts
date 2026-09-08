@@ -20,24 +20,31 @@ export async function getOpenGraphImage(url?: string | null): Promise<string | n
       return cleanAndResolveUrl(trimmed, trimmed);
     }
 
-    // Try 1: Social bot User-Agent (bypasses challenges on Instagram, WordPress, etc.)
-    let html = await fetchHtmlWithUa(trimmed, "Twitterbot/1.0");
-    if (html?.startsWith("__DIRECT_IMAGE__:")) {
-      return cleanAndResolveUrl(html.replace("__DIRECT_IMAGE__:", ""), trimmed);
-    }
-    let image = extractImageFromHtml(html, trimmed);
-    if (image) return image;
+    const isFlipkart = trimmed.includes("flipkart.com");
+    const uas = isFlipkart
+      ? [
+          "Facebot",
+          "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+          "Twitterbot/1.0",
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        ]
+      : [
+          "Twitterbot/1.0",
+          "facebookexternalhit/1.1 (+http://www.facebook.com/externalhit_uatext.php)",
+          "Facebot",
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
+        ];
 
-    // Try 2: Standard desktop browser User-Agent (for brand & e-commerce stores that filter bots)
-    html = await fetchHtmlWithUa(
-      trimmed,
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-    );
-    if (html?.startsWith("__DIRECT_IMAGE__:")) {
-      return cleanAndResolveUrl(html.replace("__DIRECT_IMAGE__:", ""), trimmed);
+    for (const ua of uas) {
+      const html = await fetchHtmlWithUa(trimmed, ua);
+      if (html?.startsWith("__DIRECT_IMAGE__:")) {
+        return cleanAndResolveUrl(html.replace("__DIRECT_IMAGE__:", ""), trimmed);
+      }
+      const image = extractImageFromHtml(html, trimmed);
+      if (image && !image.includes("previewdoh/amazon.png")) {
+        return image;
+      }
     }
-    image = extractImageFromHtml(html, trimmed);
-    if (image) return image;
 
     return null;
   } catch (err) {
