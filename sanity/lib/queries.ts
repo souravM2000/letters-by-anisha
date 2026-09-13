@@ -8,7 +8,10 @@ export const siteSettingsQuery = defineQuery(`
     bio,
     profileImage,
     socialHandles,
-    metrics,
+    metrics {
+      ...,
+      "monthlyUniqueViewers": coalesce(monthlyUniqueViewers, avgReach)
+    },
     "resumeUrl": resumeFile.asset->url,
     seo
   }
@@ -19,6 +22,7 @@ export const metricsQuery = defineQuery(`
   *[_type == "siteSettings"][0].metrics {
     followers,
     avgEngagementRate,
+    "monthlyUniqueViewers": coalesce(monthlyUniqueViewers, avgReach),
     avgReach,
     monthlyViews,
     lastUpdated

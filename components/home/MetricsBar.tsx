@@ -13,7 +13,8 @@ function formatNumber(n: number | null | undefined): string | null {
 
 function formatDate(dateStr: string | null | undefined): string | null {
   if (!dateStr) return null;
-  return new Date(dateStr).toLocaleDateString("en-US", {
+  const date = dateStr.includes("T") ? new Date(dateStr) : new Date(`${dateStr}T12:00:00`);
+  return date.toLocaleDateString("en-US", {
     month: "short",
     year: "numeric",
   });
@@ -52,6 +53,8 @@ export async function MetricsBar() {
 
   if (!metrics) return null;
 
+  const uniqueViewers = metrics.monthlyUniqueViewers ?? metrics.avgReach;
+
   const stats: { label: string; value: string | null; suffix?: string }[] = [
     { label: "Followers", value: formatNumber(metrics.followers) },
     {
@@ -59,7 +62,7 @@ export async function MetricsBar() {
       value: metrics.avgEngagementRate != null ? metrics.avgEngagementRate.toFixed(1) : null,
       suffix: "%",
     },
-    { label: "Avg. Reach", value: formatNumber(metrics.avgReach) },
+    { label: "Monthly Unique Viewers", value: formatNumber(uniqueViewers) },
     { label: "Monthly Views", value: formatNumber(metrics.monthlyViews) },
   ].filter((s) => s.value != null);
 
@@ -73,7 +76,7 @@ export async function MetricsBar() {
       className="py-16 md:py-24 bg-brand-vanilla border-y editorial-border"
     >
       <Container>
-        <SectionHeading eyebrow="By the numbers" title="Metrics" />
+        <SectionHeading eyebrow="Instagram Insights" title="Instagram Metrics" />
 
         <div className="flex flex-wrap justify-center divide-x divide-brand-ink/10">
           {stats.map((stat) => (

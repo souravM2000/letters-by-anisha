@@ -25,6 +25,7 @@ export interface SocialLink {
 export interface SiteMetrics {
   followers?: number | null;
   avgEngagementRate?: number | null;
+  monthlyUniqueViewers?: number | null;
   avgReach?: number | null;
   monthlyViews?: number | null;
   lastUpdated?: string | null;

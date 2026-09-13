@@ -84,21 +84,36 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'metrics',
-      title: 'Metrics',
+      title: 'Instagram Metrics',
+      description: 'Key performance metrics from Instagram',
       type: 'object',
       fields: [
-        defineField({ name: 'followers', title: 'Followers', type: 'number' }),
+        defineField({ name: 'followers', title: 'Instagram Followers', type: 'number' }),
         defineField({
           name: 'avgEngagementRate',
           title: 'Avg Engagement Rate (%)',
           type: 'number',
         }),
-        defineField({ name: 'avgReach', title: 'Avg Reach per Post', type: 'number' }),
+        defineField({
+          name: 'monthlyUniqueViewers',
+          title: 'Monthly Unique Viewers',
+          type: 'number',
+          description: 'Monthly unique accounts reached on Instagram',
+        }),
+        defineField({
+          name: 'avgReach',
+          title: 'Avg Reach per Post (Deprecated)',
+          type: 'number',
+          hidden: true,
+        }),
         defineField({ name: 'monthlyViews', title: 'Monthly Views', type: 'number' }),
         defineField({
           name: 'lastUpdated',
           title: 'Last Updated',
-          type: 'datetime',
+          type: 'date',
+          options: {
+            dateFormat: 'YYYY-MM-DD',
+          },
         }),
       ],
     }),

@@ -1,6 +1,7 @@
 import { Container } from "@/components/ui/Container";
 import { Section } from "@/components/ui/Section";
 import { FadeUp } from "@/components/ui/Motion";
+import { SocialIcon } from "@/components/ui/SocialIcon";
 import { client } from "@/sanity/lib/client";
 import { siteSettingsQuery } from "@/sanity/lib/queries";
 import type { SiteSettings } from "@/sanity/types";
@@ -14,7 +15,8 @@ function formatMetric(n: number | null | undefined): string | null {
 
 function formatDate(dateStr: string | null | undefined): string | null {
   if (!dateStr) return null;
-  return new Date(dateStr).toLocaleDateString("en-US", {
+  const date = dateStr.includes("T") ? new Date(dateStr) : new Date(`${dateStr}T12:00:00`);
+  return date.toLocaleDateString("en-US", {
     month: "short",
     year: "numeric",
   });
@@ -28,13 +30,15 @@ export async function SocialSection() {
   );
   const metrics = settings?.metrics;
 
+  const uniqueViewers = metrics?.monthlyUniqueViewers ?? metrics?.avgReach;
+
   const stats = [
     { label: "Followers", value: formatMetric(metrics?.followers) },
     {
       label: "Avg. Engagement",
       value: metrics?.avgEngagementRate != null ? `${metrics.avgEngagementRate.toFixed(1)}%` : null,
     },
-    { label: "Avg. Reach", value: formatMetric(metrics?.avgReach) },
+    { label: "Monthly Unique Viewers", value: formatMetric(uniqueViewers) },
     { label: "Monthly Views", value: formatMetric(metrics?.monthlyViews) },
   ].filter((s) => s.value != null);
 
@@ -47,11 +51,15 @@ export async function SocialSection() {
       <Container>
         <FadeUp className="flex flex-col md:flex-row md:items-center justify-between gap-8 bg-brand-cream border border-brand-terracotta/20 rounded-2xl p-6 md:p-10 shadow-sm">
           <div className="w-full md:w-1/3 text-center md:text-left">
+            <div className="inline-flex items-center gap-1.5 mb-2 text-brand-terracotta">
+              <SocialIcon platform="instagram" className="w-4 h-4" />
+              <span className="text-xs uppercase font-medium tracking-widest">Instagram Insights</span>
+            </div>
             <h3 className="font-serif text-2xl md:text-3xl text-brand-crimson mb-2">
-              Audience Reach
+              Instagram Reach
             </h3>
             <p className="text-sm text-brand-ink/60 leading-relaxed max-w-md mx-auto md:mx-0">
-              A snapshot of my community engagement and content performance across all platforms.
+              A snapshot of my audience engagement, reach, and content performance on Instagram.
             </p>
             {lastUpdated && (
               <p className="text-xs text-brand-ink/40 mt-4 md:mt-6 uppercase tracking-widest font-medium">
